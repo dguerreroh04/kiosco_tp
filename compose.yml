@@ -11,6 +11,3 @@ services:
       - POSTGRES_DB=kiosco_db
     volumes:
       - pgdata:/var/lib/postgresql/data
-
-volumes:
-  pgdata:
