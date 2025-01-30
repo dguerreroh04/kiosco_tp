@@ -9,13 +9,13 @@ router.get('/', (req, res) => {
 //para obtener un usuario segun su id
 router.get('/:id', (req,res)=> {
     const { id } = req.params 
-    res.json({mensaje: 'Usuario segun ID: ${id}' })
+    res.json({mensaje: 'Usuario según ID: ${id}' })
   })
 
 //para obtener un usuario segun su nombre
 router.get('/nombre/:nombre', (req,res)=> {
     const { nombre } = req.params 
-    res.json({mensaje: 'Usuario segun Nombre: ${nombre}' })
+    res.json({mensaje: 'Usuario según Nombre: ${nombre}' })
   })
 
 //para eliminar un usuario (por id)
@@ -41,11 +41,11 @@ router.post('/',(req,res) =>{
   }
 
   if(!direc_email.test(mail)){
-    return res.status(400).json({mensaje: 'Ingrese una direccion de correo electronico valida'})
+    return res.status(400).json({mensaje: 'Ingrese una dirección de correo electronico valida'})
   }
 
   if(!numero_telefono(nro_telefono)){
-    return res.status(400).json({mensaje: 'Ingrese un numero de telefono valido entre 10-14 digitos'})
+    return res.status(400).json({mensaje: 'Ingrese un número de telefono válido entre 10-14 digitos'})
   }
   
   if(dni < 1000000 || dni > 99999999){
