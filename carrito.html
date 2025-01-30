@@ -7,8 +7,8 @@
   </head>
     <title>Kiosco</title>
 </head>
-<body style="background-color: #fffacd">
-    <nav class="navbar navbar-expand-lg" style="background-color: #901010; display: flex; position: sticky; top: 0px; width: 100%;">
+<body style="background-color: #505050">
+    <nav class="navbar navbar-expand-lg" style="background-color: #901010; display: flex; position: sticky; top: 0px; width: 100%; border-radius: 30px; border: black solid 3px;">
         <div class="container-fluid">
           <a class="navbar-brand" style="font-size: xx-large; color: #f6f6f6; font-weight: bolder;" href="inicio.html"><img src="images/logokiosco.png" alt="logo"></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,10 +26,46 @@
         </div>
       </nav>
 
-      <div class="container" style="width: 100%; display: flex; flex-direction: column;">
-        
+      <div class="alert" id="alert" style="position: absolute; background-color: green; display: none;">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+        <strong>Compra Realizada!</strong> Su compra ha sido confirmada.
+      </div>
+
+      <div class="container" style="max-width: 100%; display: flex; flex-direction: row; padding-top: 10px;">
+        <div id="Productos" style="width: 65%;">
+          <h1>Tu Carrito</h1>
+        </div>
+        <div id="datos_de_compra" style="width: 35%; display: flex; flex-direction: column; align-items: center; border: solid 2px black; border-radius: 4%; background-color: #c57474; height: 400px;">
+          <h2 style="padding-top: 5px;">Datos de la compra</h2>
+          <h3 style="padding-top: 10px;">Total:</h3>
+          <h4 style="padding-top: 20px;">Método de Pago:</h4> 
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+            <label class="form-check-label" for="flexRadioDefault1">
+              Tarjeta de Crédito
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+            <label class="form-check-label" for="flexRadioDefault1">
+              Tarjeta de Débito
+            </label>
+          </div>
+          <div class="form-check" style="padding-bottom: 30px;">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+            <label class="form-check-label" for="flexRadioDefault1">
+              Transferencia
+            </label>
+          </div>
+          <button type="button" class="btn btn-danger" onclick="compra()">Confirmar Compra</button>
+        </div>
       </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+      function compra() {
+        document.getElementById("alert").style.display = "flex";
+    }
+    </script>
 </body>
 </html>
