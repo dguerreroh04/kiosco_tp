@@ -1,0 +1,51 @@
+body{
+    background-color: #505050;
+}
+/*navbar*/
+.navbar {
+    background-color: #901010;
+    display: flex;
+    position: sticky;
+    top: 0px;
+    width: 100%;
+    border-radius: 30px;
+    border: black solid 3px;
+}
+/*Inicio*/
+.container_inicio {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.container_inicio h1 {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+
+}
+
+/*Carrito*/
+.alert {
+    position: absolute;
+    background-color: green;
+    display: none;
+}
+.container_carrito {
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding-top: 10px;
+}
+.lista_productos {
+    width: 65%;
+}
+.datos_de_compra {
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: solid 2px black;
+    border-radius: 4%;
+    background-color: #c57474;
+    height: 400px;
+}
