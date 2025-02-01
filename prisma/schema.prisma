@@ -8,35 +8,44 @@ datasource db {
 }
 
 model Producto {
-  id          Int     @id @default(autoincrement())
-  nombre      String  @unique
-  precio      Decimal
-  stock       Int
-  descripcion String
-  nacional    Boolean
-  categoria   String
+  id                      Int                       @id @default(autoincrement())
+  nombre                  String                    @unique
+  precio_unidad           Decimal
+  descripcion             String
+  nacional                Boolean
+  categoria               String
+  Productos_seleccionados Productos_seleccionados[]
+}
+
+model Productos_seleccionados {
+  id           Int      @id @default(autoincrement())
+  producto     Producto @relation(fields: [id_producto], references: [id])
+  cantidad     Int
+  id_producto  Int
+  comprador    Usuario  @relation(fields: [id_comprador], references: [id])
+  id_comprador Int
 }
 
 model Usuario {
-  id          Int     @id @default(autoincrement())
-  nombre      String  @unique
-  contrasenia String  @unique
-  edad        Int
-  mail        String  @unique
-  nro_tel     Int     @unique
-  dni         Int     @unique
-  es_empleado Boolean @default(false)
-
-  Ticket Ticket[]
+  id                      Int                       @id @default(autoincrement())
+  nombre                  String                    @unique
+  contrasenia             String                    @unique
+  edad                    Int
+  mail                    String                    @unique
+  nro_tel                 Int                       @unique
+  dni                     Int                       @unique
+  es_empleado             Boolean                   @default(false)
+  Productos_seleccionados Productos_seleccionados[]
+  Ticket                  Ticket[]
 }
 
 model Ticket {
-  id                   Int      @id @default(autoincrement())
-  comprador            Usuario  @relation(fields: [id_comprador], references: [id])
-  id_comprador         Int
-  fecha_venta          DateTime @default(now()) @db.Timestamp(6)
-  lista_productos      Int[]
-  lista_cant_productos Int[]
-  forma_pago           String
-  total                Int
+  id            Int      @id @default(autoincrement())
+  nombre_kiosco String
+  Domicilio     String
+  comprador     Usuario  @relation(fields: [id_comprador], references: [id])
+  id_comprador  Int
+  fecha_venta   DateTime @default(now()) @db.Timestamp(6)
+  forma_pago    String
+  total         Int
 }
