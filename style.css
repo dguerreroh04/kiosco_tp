@@ -6,7 +6,9 @@ body{
     background-color: #901010;
     display: flex;
     position: sticky;
-    top: 0px;
+    top: 0;
+    left: 0;
+    z-index: 1000;
     width: 100%;
     border-radius: 30px;
     border: black solid 3px;
@@ -22,6 +24,17 @@ body{
     width: 100%;
     justify-content: center;
 
+}
+.container_productos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.container_productos ul{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
 }
 
 /*Carrito*/
