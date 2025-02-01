@@ -1,11 +1,12 @@
+const { PrismaClient } = require('@prisma/client')
 const express = require('express')
 const router = express.Router()
-const app = express()
-const port = 3000
+const prisma = new PrismaClient()
 
 //para obtener todos los productos
-router.get('/', (req, res) => {
-  res.json({ mensaje: 'Lista de Productos' });
+router.get('/', async (req, res) => {
+  const productos = await prisma.producto.findMany()
+  res.json(productos)
 })
 
 //para obtener un producto segun su id
