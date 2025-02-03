@@ -1,15 +1,16 @@
+const { PrismaClient } = require('@prisma/client')
 const express = require('express')
 const router = express.Router()
-const app = express()
-const port = 3000
+const prisma = new PrismaClient()
 
 //para obtener todos los productos
-router.get('/', (req, res) => {
-  res.json({ mensaje: 'Lista de Productos' });
+router.get('/', async (req, res) => {
+  const productos = await prisma.producto.findMany()
+  res.json(productos)
 })
 
 //para obtener un producto segun su id
-router.get('/:id', (req,res)=> {
+router.get('/:id', async (req,res)=> {
   const {id} = req.params 
   res.json({mensaje: 'Producto segun ID: ${id}' })
 })
@@ -18,6 +19,19 @@ router.get('/:id', (req,res)=> {
 router.delete('/:id',(req,res)=> {
   const {id} = req.params 
   res.json({mensaje: 'Producto con ID: ${id} ha sido retirado del stock' })
+})
+
+router.post('/', async (req, res) => {
+  const producto = await prisma.producto.create({
+    data: {
+      nombre: req.body.nombre,
+      precio_unidad: req.body.precio,
+      descripcion: req.body.descripcion,
+      nacional: req.body.nacional,
+      categoria: req.body.categoria
+    }
+  })
+  res.status(201).send(producto)
 })
 
 //para modificar precio
