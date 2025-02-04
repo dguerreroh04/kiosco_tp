@@ -19,9 +19,28 @@ function showProducts() {
             <h5 class="card-title">${producto.nombre}</h5>
                 <p class="card-text">${producto.precio}</p>
                 <p class="card-text">${producto.descripcion}</p>
-                <button type="button" class="btn btn-primary" onclick="añadir_carrito()" >Añadir al carrito</button>
+                <button type="button" class="btn btn-primary" onclick="añadir_carrito(${producto.id})">Añadir al carrito</button>
             `;
             ul.appendChild(productoDiv);
         });
     });
+}
+function añadir_carrito() {
+    fetch ('http://localhost:3000/api/v1/', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            id_producto: id_producto,
+            id_comprador: id_comprador,
+            cantidad: 1
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Producto añadido al carrito:", data);
+        alert("Producto añadido al carrito con exito");
+    })
+    .catch(error => console.error("Error al añadir al carrito:", error));
 }
