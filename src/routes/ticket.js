@@ -84,4 +84,30 @@ router.post('/', async (req,res)=>{
     }
 })
 
+//modificar ticket
+router.put('/:id',async(res,req)=>{
+    const {id} = req.params
+    const {forma_pago} = req.body
+
+    if(!forma_pago){
+        return res.status(400).json({mensaje:'Ingrese un metodo de pago'})
+    }
+    const formas_de_pago = ['Crédito', 'Débito', 'Transferencia']
+    if(!formas_de_pago.includes(forma_pago)){
+        return res.status(400).json({mensaje:'Ingrese un metodo de pago valido'})
+    }
+
+    try{
+        const ticket = await prisma.ticket.findUnique({where: {id:Number(id)}})
+        if(!ticket){
+            return res.status(404).json({mensaje:'No se encontro el ticket'})
+        }
+        const ticket_modificado = await prisma.ticket.update({where: {id: Number(id)}, data: {forma_pago}})
+        res.json({mensaje: 'El ticket se ha modifiado',ticket: ticket_modificado})
+    }catch(error){
+        res.status(500).json({ mensaje: 'Error al modificar el ticket', error });
+    }
+})
+
 module.exports = router
+
