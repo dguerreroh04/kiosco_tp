@@ -27,7 +27,7 @@
       </div>
     </nav>
 
-    <div class="alert" id="alert">
+    <div class="alert" id="alert" style="width: 100%; justify-content: space-evenly;">
       <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
       <strong>Compra Realizada!</strong> Su compra ha sido confirmada.
     </div>
@@ -38,7 +38,9 @@
         </div>
         <div class="datos_de_compra">
           <h2 style="padding-top: 5px;">Datos de la compra</h2>
-          <h3 style="padding-top: 10px;">Total:</h3>
+          <div class="total">
+            <h3 style="padding-top: 10px;">Total: </h3>
+          </div>
           <h4 style="padding-top: 20px;">Método de Pago:</h4> 
           <div class="form-check">
             <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
@@ -58,7 +60,7 @@
               Transferencia
             </label>
           </div>
-          <button type="button" class="btn btn-danger" onclick="compra()">Confirmar Compra</button>
+          <button type="button" class="btn btn-warning" onclick="compra()">Confirmar Compra</button>
         </div>
     </div>
 
