@@ -14,6 +14,7 @@ model Producto {
   descripcion             String
   nacional                Boolean
   categoria               String
+  imagen                  String                    @unique
   Productos_seleccionados Productos_seleccionados[]
 }
 
