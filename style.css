@@ -6,7 +6,9 @@ body{
     background-color: #901010;
     display: flex;
     position: sticky;
-    top: 0px;
+    top: 0;
+    left: 0;
+    z-index: 1000;
     width: 100%;
     border-radius: 30px;
     border: black solid 3px;
@@ -23,10 +25,22 @@ body{
     justify-content: center;
 
 }
+.container_productos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.container_productos ul{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
 
 /*Carrito*/
 .alert {
     position: absolute;
+    z-index: 1000;
     background-color: green;
     display: none;
 }
@@ -38,7 +52,60 @@ body{
 }
 .lista_productos {
     width: 65%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+/*Para productos del carrito*/
+.card-carrito {
+    display: grid;
+    grid-template-areas: 
+        "img nombre precio contador"
+        "img descripcion descripcion btn";
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    padding: 20px;
+    border: 2px solid green;
+    width: max-content;
+    text-align: left;
+}
+.nombre {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.precio {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: green;
+}
+.contador {
+    grid-area: contador;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
+}
+.contador div {
+    font-size: 1rem;
+    width: 25px;
+    text-align: center;
+}
+.contador button {
+    font-size: 0.9rem;
+    padding: 3px 8px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+.disminuir {
+    background-color: red;
+    color: white;
+}
+.aumentar {
+    background-color: green;
+    color: white;
+}
+
 .datos_de_compra {
     width: 35%;
     display: flex;
@@ -48,6 +115,11 @@ body{
     border-radius: 4%;
     background-color: #c57474;
     height: 400px;
+    position: sticky;
+    top: 95px;
+}
+.datos_de_compra button {
+    height: 80px;
 }
 
 /*Cuenta*/
