@@ -5,7 +5,7 @@ window.onload = function() {
 function showCarrito() {
     let container = document.getElementById('lista_productos');
 
-    fetch('http://localhost:3000/api/v1/')
+    fetch('http://localhost:3000/api/v1/productos_seleccionados')
     .then(response => response.json())
     .then(productos => {
         console.log(productos);
@@ -30,4 +30,58 @@ function showCarrito() {
         });
     })
     .catch(error => console.error("Error al obtener el carrito", error));
+}
+
+function eliminar_del_carrito(id_producto) {
+    alert('Borrando producto ' + id_producto);
+    fetch('http://localhost:3000/api/v1/productos_seleccionados/' + id_producto, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(response => {
+        console.log(response)
+        showCarrito()
+    })
+}
+
+function confirmar_compra() {
+    const metodo_pago = document.querySelector('input[name="flexRadioDefault"]:checked');
+
+    if (!metodo_pago) {
+        alert("Seleccione un método de pago!");
+        return;
+    }
+
+    fetch('http://localhost:3000/api/v1/productos_seleccionados')
+    .then(response => response.json())
+    .then(productos => {
+        if (productos.length === 0) {
+            alert("El carrito esta vacio");
+            return;
+        }
+        let total = productos.reduce((sum, producto) => sum + (producto.producto.precio * producto.cantidad), 0);
+        let id_comprador = 1;
+        fetch('http://localhost:3000/api/v1/ticket', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id_comprador: id_comprador,
+                nombre_kiosco: 'Kiosco Informatico',
+                Domicilio: 'Paseo Colon 850',
+                forma_pago: metodo_pago.nextElementSibling.textContent.trim(),
+                total: total
+            }) 
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Ticket creado", data);
+            document.getElementById("alert").style.display = "flex";
+            return fetch('http://localhost:3000/api/v1/productos_seleccionados/vaciar', { method: 'DELETE' });
+        })
+        .then(() => showCarrito())
+        .catch(error => console.error("Error al generar ticket", error));
+    })
+    .catch(error => console.error("Error al generar carrito", error))
 }
