@@ -27,7 +27,7 @@ router.get('/:id',async (req,res)=> {
     }
   })
 
-res.json({mensaje: 'Ticket según Fecha de venta: ${fecha_venta}'})
+res.json({mensaje: `Ticket según Fecha de venta: ${fecha_venta}`})
 router.get('/fecha_venta/:fecha_venta', async(req,res)=>{
     const { fecha_venta } = req.params
     try{
@@ -110,4 +110,3 @@ router.put('/:id',async(res,req)=>{
 })
 
 module.exports = router
-
