@@ -1,11 +1,13 @@
 const { PrismaClient } = require('@prisma/client')
 const express = require('express')
+var cors = require('cors')
 const usuarios = require('./routes/usuarios')
 const ticket = require('./routes/ticket')
 const app = express()
 const port = 3000
 
 app.use(express.json())
+app.use(cors())
 
 const prisma = new PrismaClient()
 
