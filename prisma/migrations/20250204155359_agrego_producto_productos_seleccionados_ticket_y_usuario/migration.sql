@@ -6,6 +6,7 @@ CREATE TABLE "Producto" (
     "descripcion" TEXT NOT NULL,
     "nacional" BOOLEAN NOT NULL,
     "categoria" TEXT NOT NULL,
+    "imagen" TEXT NOT NULL,
 
     CONSTRAINT "Producto_pkey" PRIMARY KEY ("id")
 );
@@ -49,6 +50,9 @@ CREATE TABLE "Ticket" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Producto_nombre_key" ON "Producto"("nombre");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Producto_imagen_key" ON "Producto"("imagen");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Usuario_nombre_key" ON "Usuario"("nombre");
