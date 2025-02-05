@@ -13,7 +13,7 @@ function showCarrito() {
 
         productos.forEach(producto => {
             let productoDiv = document.createElement('div')
-            productoDiv.classList.add('card border-success mb-3 card-carrito');
+            productoDiv.classList.add('card', 'border-success', 'mb-3', 'card-carrito');
             productoDiv.innerHTML = `
                 <img src="${producto.producto.imagen}" alt="Producto" style="width: 180px; grid-area: img;">
                 <h5 class="card-title nombre" style="grid-area: nombre;">${producto.producto.nombre}</h5>

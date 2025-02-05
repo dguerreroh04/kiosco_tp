@@ -11,7 +11,7 @@ function showProducts() {
             let container = document.getElementById('container_' + producto.categoria);
             let ul = container.querySelector('ul');
             let productoDiv = document.createElement('div');
-            productoDiv.classList.add('card border-info mb-3');
+            productoDiv.classList.add('card', 'border-info', 'mb-3');
             productoDiv.style.width = 'fit-content';
             productoDiv.style.height = 'min-content';
             productoDiv.innerHTML = `
@@ -25,8 +25,8 @@ function showProducts() {
         });
     });
 }
-function añadir_carrito() {
-    fetch ('http://localhost:3000/api/v1/', {
+function añadir_carrito(id_producto) {
+    fetch ('http://localhost:3000/api/v1/productos_seleccionados', {
         method: 'POST',
         headers: {
             'Content-type': 'application/json'
