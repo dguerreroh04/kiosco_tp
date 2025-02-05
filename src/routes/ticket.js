@@ -27,15 +27,18 @@ router.get('/:id',async (req,res)=> {
     }
   })
 
-res.json({mensaje: 'Ticket según Fecha de venta: ${fecha_venta}'})
 router.get('/fecha_venta/:fecha_venta', async(req,res)=>{
     const { fecha_venta } = req.params
     try{
         const tickets = await prisma.ticket.findMany({
             where:{fecha_venta: new Date(fecha_venta)}
         })
-        if(tickets.length){return res.status(404).json({mensaje: 'No hay tickets de esa fecha'})}
-        res.json(tickets)
+
+        if(!tickets.length){
+            return res.status(404).json({mensaje: 'No hay tickets de esa fecha'})
+        }
+
+        res.json({mensaje: `Ticket según Fecha de venta: ${fecha_venta}`,tickets})
     }catch(error){
         res.status(505).json({mensaje: 'Error al obtener los tickets',error})
     }
