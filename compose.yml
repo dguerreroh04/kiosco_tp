@@ -1,16 +1,13 @@
-version: "3.8"
+version: '3.8'
 services:
   postgres:
     image: postgres:15
     container_name: db_kiosco
     ports:
-      - "5432:5432"
+      - 5432:5432
     environment:
       - POSTGRES_USER=kiosco
       - POSTGRES_PASSWORD=asos_de_info_no_cert
       - POSTGRES_DB=kiosco_db
     volumes:
-      - pgdata:/var/lib/postgresql/data
-
-volumes:
-  pgdata:
+      - ./pgdata:/var/lib/postgresql/data
