@@ -57,7 +57,12 @@ router.delete('/:id', async (req,res)=> {
 
 //creacion de usuario:
 router.post('/', async (req,res) =>{
-  const { nombre, edad, mail, nro_tel, dni, contrasenia } = req.body
+  const nombre = req.body.nombre
+  const edad = parseInt(req.body.edad)
+  const mail = req.body.mail
+  const nro_tel = parseInt(req.body.nro_tel)
+  const dni = parseInt(req.body.dni)
+  const contrasenia = req.body.contrasenia
   const direc_email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   const numero_telefono = /^\d{8}$/ // Numero valido de 8 digitos
 
@@ -69,7 +74,7 @@ router.post('/', async (req,res) =>{
     return res.status(400).json({mensaje: 'Nombre demasiado corto'})
     }
 
-  if(edad <= 17){
+  if(parseInt(edad) <= 17){
     return res.status(400).json({mensaje: 'Se debe tener al menos 18 años'})
     }
 
@@ -101,7 +106,12 @@ router.post('/', async (req,res) =>{
 //modificar datos de usuario:
 router.put('/:id',async (req,res) =>{
   const {id} = req.params
-  const { nombre, edad, mail, nro_tel, dni, contrasenia } = req.body
+  const nombre = req.body.nombre
+  const edad = parseInt(req.body.edad)
+  const mail = req.body.mail
+  const nro_tel = parseInt(req.body.nro_tel)
+  const dni = parseInt(req.body.dni)
+  const contrasenia = req.body.contrasenia
   try{
     const usuario = await prisma.usuario.findUnique({ where: {id: Number(id)} })
 

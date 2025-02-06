@@ -5,7 +5,7 @@ function crear(){
         const nombre = document.getElementById("nombre").value;
         const edad = document.getElementById("edad").value;
         const mail = document.getElementById("mail").value;
-        const nro_telefono = document.getElementById("num_tel").value;
+        const nro_tel = document.getElementById("nro_tel").value;
         const dni = document.getElementById("dni").value;
         const contrasenia = document.getElementById("contraseña").value;
 
@@ -13,7 +13,7 @@ function crear(){
         nombre,
         edad,
         mail,
-        nro_telefono,
+        nro_tel,
         dni,
         contrasenia
         };
@@ -24,14 +24,7 @@ function crear(){
             headers: {
             'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                nombre: nombre,
-                contrasenia: contrasenia,
-                edad: edad,
-                mail: mail,
-                nro_telefono: nro_telefono,
-                dni: dni,
-            })
+            body: JSON.stringify(datosUsuario)
         });
 
         const data = await respuesta.json();
