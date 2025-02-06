@@ -57,11 +57,11 @@ router.delete('/:id', async (req,res)=> {
 
 //creacion de usuario:
 router.post('/', async (req,res) =>{
-  const { nombre, edad, mail, nro_telefono, dni, contrasenia } = req.body
+  const { nombre, edad, mail, nro_tel, dni, contrasenia } = req.body
   const direc_email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  const numero_telefono = /^\d{10,14}$/ // Numero valido entre 10 a 14 digitos
+  const numero_telefono = /^\d{8}$/ // Numero valido de 8 digitos
 
-  if(!nombre||!edad||!mail||!nro_telefono||!dni||!contrasenia){
+  if(!nombre||!edad||!mail||!nro_tel||!dni||!contrasenia){
     return res.status(400).json({mensaje: 'Todos los campos son obligatorios'})
     }
 
@@ -77,34 +77,31 @@ router.post('/', async (req,res) =>{
     return res.status(400).json({mensaje: 'Ingrese una dirección de correo electronico valida'})
     }
 
-  if(!numero_telefono.test(nro_telefono)){
-    return res.status(400).json({mensaje: 'Ingrese un número de telefono válido entre 10-14 digitos'})
+  if(!numero_telefono.test(nro_tel)){
+    return res.status(400).json({mensaje: 'Ingrese un número de telefono válido de 8 digitos'})
     }
 
   if(dni < 1000000 || dni > 99999999){
    return res.status(400).json({mensaje: 'Ingrese un DNI valido'})
     }
 
-  try{
-    const nombre_usado = await prisma.usuario.findUnique({
-      where: {nombre}
-    })
-    if(nombre_usado){return res.status(400).json({mensaje: 'Nombre no disponible, porfavor elija otro'})}
+  
+  const nombre_usado = await prisma.usuario.findUnique({
+    where: {nombre}
+  })
+  if(nombre_usado){return res.status(400).json({mensaje: 'Nombre no disponible, porfavor elija otro'})}
 
-    const usuario = await prisma.usuario.create({data:{ nombre, edad, mail, nro_telefono, dni, contrasenia}})
+  const usuario = await prisma.usuario.create({data:{ nombre, edad, mail, nro_tel, dni, contrasenia}})
 
-    res.status(201).json({mensaje: 'Usuario creado exitosamente, porfavor verifique sus datos',usuario})
-  }catch (error){
-    res.status(500).json({mensaje:
-'Error al crear usuario',error})
-    }
+  res.status(201).json({mensaje: 'Usuario creado exitosamente, porfavor verifique sus datos',usuario})
+
 })
 
 
 //modificar datos de usuario:
 router.put('/:id',async (req,res) =>{
   const {id} = req.params
-  const { nombre, edad, mail, nro_telefono, dni, contrasenia } = req.body
+  const { nombre, edad, mail, nro_tel, dni, contrasenia } = req.body
   try{
     const usuario = await prisma.usuario.findUnique({ where: {id: Number(id)} })
 
@@ -139,12 +136,12 @@ router.put('/:id',async (req,res) =>{
       datos_actualizados.mail = mail
         }
 
-    if(nro_telefono){
+    if(nro_tel){
       const numero_telefono = /^\d{10,14}$/
-      if(!numero_telefono.test(nro_telefono)){
+      if(!numero_telefono.test(nro_tel)){
         return res.status(400).json({mensaje: 'Ingrese un número de telefono válido entre 10-14 digitos'})
             }
-      datos_actualizados.nro_telefono = nro_telefono
+      datos_actualizados.nro_tel = nro_tel
         }
 
     if(dni){
