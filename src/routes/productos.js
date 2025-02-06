@@ -90,7 +90,8 @@ router.post('/', async (req, res) => {
   const nacional = req.body.nacional
   const categoria = req.body.categoria
   const imagen = req.body.imagen
-  if (!nombre || !precio_unidad || !descripcion || !nacional || !categoria || !imagen) {
+  console.log(typeof nacional)
+  if (!nombre || !precio_unidad || !descripcion || nacional === undefined || !categoria || !imagen) {
     return res.status(400).json({mensaje: 'Todos los campos son obligatorios y deben ser correctos'})
   }
   if (comprobar_tipos_datos(nombre, descripcion, nacional, categoria, imagen) === false) {
