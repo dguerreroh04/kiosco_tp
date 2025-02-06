@@ -14,14 +14,14 @@ function showProducts() {
                 let ul = container.querySelector('ul');
                 let productoDiv = document.createElement('div');
                 productoDiv.classList.add('card', 'border-info', 'mb-3');
-                productoDiv.style.width = 'fit-content';
-                productoDiv.style.height = 'min-content';
+                productoDiv.style.width = '200px';
+                productoDiv.style.height = '365px';
                 productoDiv.innerHTML = `
                     <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 180px;">
                 <h5 class="card-title">${producto.nombre}</h5>
-                    <p class="card-text">${producto.precio}</p>
+                    <p class="card-text">$${producto.precio_unidad}</p>
                     <p class="card-text">${producto.descripcion}</p>
-                    <button type="button" class="btn btn-primary" onclick="añadir_carrito(${producto.id})">Añadir al carrito</button>
+                    <button type="button" class="btn btn-primary btn-prod" onclick="añadir_carrito(${producto.id})">Añadir al carrito</button>
                 `;
                 ul.appendChild(productoDiv);
             } else {
