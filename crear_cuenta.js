@@ -1,22 +1,43 @@
-const mensajeError = document.getElementsByClassName("error")[0];
+document.getElementById("guardarBtn").addEventListener("submit", async function (event) {
+    event.preventDefault(); 
 
-document.getElementById("register-form").addEventListener("submit",async(e)=>{
-  e.preventDefault();
-  console.log(e.target.children.user.value)
-  const res = await fetch("http://localhost:3000/api/v1/usuarios",{
-    method:"POST",
-    headers:{
-      "Content-Type" : "application/json"
-    },
-    body: JSON.stringify({
-      user: e.target.children.user.value,
-      email: e.target.children.email.value,
-      password: e.target.children.password.value
-    })
+    const nombre = document.getElementById("nombre").value;
+    const edad = document.getElementById("edad").value;
+    const mail = document.getElementById("mail").value;
+    const nro_telefono = document.getElementById("nro_tel").value;
+    const dni = document.getElementById("dni").value;
+    const contrasenia = document.getElementById("contrasenia").value;
+
+    const datosUsuario = {
+      nombre,
+      edad,
+      mail,
+      nro_tel,
+      dni,
+      contrasenia
+    };
+
+    try {
+      const respuesta = await fetch('http://localhost:3000/api/v1/usuarios', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datosUsuario)
+      });
+
+      const data = await respuesta.json();
+  
+      if (respuesta.ok) {
+        alert(data.mensaje);
+        window.location.href = "inicio.html"; 
+      } else {
+        alert(data.mensaje);
+      }
+  
+    } catch (error) {
+      console.error("Error al crear usuario:", error);
+      alert('Hubo un problema al crear la cuenta.');
+    }
   });
-  if(!res.ok) return mensajeError.classList.toggle("escondido",false);
-  const resJson = await res.json();
-  if(resJson.redirect){
-    window.location.href = resJson.redirect;
-  }
-})
+  
