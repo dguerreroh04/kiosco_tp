@@ -17,7 +17,7 @@ function showProducts() {
                 productoDiv.style.width = 'fit-content';
                 productoDiv.style.height = 'min-content';
                 productoDiv.innerHTML = `
-                    <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 180px;">
+                    <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 170px; height:200px;">
                 <h5 class="card-title">${producto.nombre}</h5>
                     <p class="card-text">${producto.precio}</p>
                     <p class="card-text">${producto.descripcion}</p>

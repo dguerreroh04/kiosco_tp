@@ -36,7 +36,15 @@ body{
     width: 100%;
     justify-content: space-around;
 }
-
+.container_productos ul div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 0px;
+}
+.container_productos ul div button {
+    height: 60px;
+}
 /*Carrito*/
 .alert {
     position: absolute;
@@ -121,6 +129,7 @@ body{
 }
 .datos_de_compra button {
     height: 80px;
+    width: 200px;
 }
 
 /*Cuenta*/
