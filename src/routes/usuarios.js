@@ -9,18 +9,18 @@ router.get('/', async (req, res) => {
     res.json(usuarios)
   }catch (error){
     res.status(500).json({mensaje: 'Error al obtener los usuarios',error})
-  }
+    }
 })
 
 router.get('/:id', async (req,res)=> {
     const { id } = req.params
     try{
-      const usuario = await prisma.usuario.findUnique({
+        const usuario = await prisma.usuario.findUnique({
         where: {id: Number(id)}
       })
       if(!usuario){
         return res.status(404).json({mensaje: 'Usuario no encontrado' })
-      }
+        }
       res.json(usuario)
     }catch (error){
       res.status(500).json({mensaje: 'Error al obtener el usuario',error})
@@ -30,12 +30,12 @@ router.get('/:id', async (req,res)=> {
 router.get('/nombre/:nombre', async (req,res)=> {
     const { nombre } = req.params 
     try{
-      const usuario = await prisma.usuario.findUnique({
+        const usuario = await prisma.usuario.findUnique({
         where: {nombre}
       })
       if(!usuario){
         return res.status(404).json({mensaje: 'Usuario no encontrado' })
-      }
+        }
       res.json(usuario)
     }catch (error){
       res.status(500).json({mensaje: 'Error al obtener el usuario',error})
@@ -45,7 +45,7 @@ router.get('/nombre/:nombre', async (req,res)=> {
 router.delete('/:id', async (req,res)=> {
     const {id} = req.params 
     try{
-      await prisma.usuario.delete({
+        await prisma.usuario.delete({
         where: {id:Number(id)}
       })
       res.json({mensaje:`Usuario con ID: ${id} ha sido eliminado`})
@@ -63,27 +63,27 @@ router.post('/', async (req,res) =>{
 
   if(!nombre||!edad||!mail||!nro_telefono||!dni||!contrasenia){
     return res.status(400).json({mensaje: 'Todos los campos son obligatorios'})
-  }
+    }
 
   if(nombre.length < 3){
     return res.status(400).json({mensaje: 'Nombre demasiado corto'})
-  }
+    }
 
   if(edad <= 17){
     return res.status(400).json({mensaje: 'Se debe tener al menos 18 años'})
-  }
+    }
 
   if(!direc_email.test(mail)){
     return res.status(400).json({mensaje: 'Ingrese una dirección de correo electronico valida'})
-  }
+    }
 
   if(!numero_telefono.test(nro_telefono)){
     return res.status(400).json({mensaje: 'Ingrese un número de telefono válido entre 10-14 digitos'})
-  }
-  
+    }
+
   if(dni < 1000000 || dni > 99999999){
    return res.status(400).json({mensaje: 'Ingrese un DNI valido'})
-  }
+    }
 
   try{
     const nombre_usado = await prisma.usuario.findUnique({
@@ -97,7 +97,7 @@ router.post('/', async (req,res) =>{
   }catch (error){
     res.status(500).json({mensaje:
 'Error al crear usuario',error})
-  }
+    }
 })
 
 
@@ -112,54 +112,80 @@ router.put('/:id',async (req,res) =>{
 
     const datos_actualizados = {}
 
-    if (nombre) {
+        if (nombre) {
       if (nombre.length < 3) {return res.status(400).json({ mensaje: 'Nombre demasiado corto' })}
 
-      if (nombre !== usuario.nombre) {
+            if (nombre !== usuario.nombre) {
         const nombre_usado = await prisma.usuario.findUnique({ where: { nombre } })
-        if (nombre_usado) {
+                if (nombre_usado) {
           return res.status(400).json({ mensaje: 'Nombre no disponible, por favor elija otro' })
+                }
+            }
+            datos_actualizados.nombre = nombre;
         }
-      }
-      datos_actualizados.nombre = nombre;
-    }
 
     if(edad){
       if(edad <= 17){
         return res.status(400).json({mensaje: 'Se debe tener al menos 18 años'})
-      }
+            }
       datos_actualizados.edad = edad
-    }
+        }
 
     if(mail){
       const direc_email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       if(!direc_email.test(mail)){
         return res.status(400).json({mensaje: 'Ingrese un correo electronico válido'})
-      }
+            }
       datos_actualizados.mail = mail
-    }
+        }
 
     if(nro_telefono){
       const numero_telefono = /^\d{10,14}$/
       if(!numero_telefono.test(nro_telefono)){
         return res.status(400).json({mensaje: 'Ingrese un número de telefono válido entre 10-14 digitos'})
-      }
+            }
       datos_actualizados.nro_telefono = nro_telefono
-    }
+        }
 
     if(dni){
       if(dni < 1000000 || dni > 99999999){
         return res.status(400).json({mensaje: 'Ingrese un dni válido'})
-      }
+            }
       datos_actualizados.dni = dni
-    }
+        }
 
     const usuario_modificado = await prisma.usuario.update({where: {id: Number(id)}, data: datos_actualizados})
 
     res.json({mensaje:'Los datos se han modificado',usuario: datos_actualizados})
   }catch(error){
     res.status(500).json({mensaje: 'Error al modificar el usuario',error})
-  }
-})
+    }
+});
 
-module.exports = router
+router.post('/login', async (req, res) => {
+    const { mail, contrasenia } = req.body;
+
+    if (!mail || !contrasenia) {
+        return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
+    }
+
+    try {
+        const usuario = await prisma.usuario.findUnique({
+            where: { mail }
+        });
+
+        if (!usuario) {
+            return res.status(404).json({ mensaje: 'Correo electrónico no encontrado' });
+        }
+
+        if (usuario.contrasenia !== contrasenia) {
+            return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+        }
+
+        res.json({ mensaje: 'Inicio de sesión exitoso', usuario });
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al iniciar sesión', error });
+    }
+});
+
+module.exports = router;

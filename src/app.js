@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client')
 const express = require('express')
 var cors = require('cors')
+const productos = require('./routes/productos')
 const usuarios = require('./routes/usuarios')
 const productos_seleccionados = require('./routes/productos_seleccionados')
 const ticket = require('./routes/ticket')
@@ -16,6 +17,7 @@ app.get('/',(req, res) =>{
     res.send('Kiosco')
 })
 
+app.use('/api/v1/productos', productos)
 app.use('/api/v1/usuarios',usuarios) 
 app.use('/api/v1/productos_seleccionados',productos_seleccionados)
 app.use('/api/v1/ticket',ticket) 
