@@ -4,7 +4,7 @@ document.getElementById('Iniciar sesion').addEventListener('submit', function(ev
   const formData = new FormData(this);
   const data = Object.fromEntries(formData);
 
-  fetch('/login', {
+  fetch('http://localhost:3000/api/v1/usuarios/login', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
