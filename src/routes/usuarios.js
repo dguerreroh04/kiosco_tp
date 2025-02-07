@@ -170,27 +170,28 @@ router.put('/:id',async (req,res) =>{
 });
 
 router.post('/login', async (req, res) => {
-    const { mail, contrasenia } = req.body;
+    const { password1 : password, username1 : username } = req.body;
 
-    if (!mail || !contrasenia) {
+    if (!password || !username) {
         return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
     }
 
     try {
         const usuario = await prisma.usuario.findUnique({
-            where: { mail }
+            where: { mail : username }
         });
 
         if (!usuario) {
             return res.status(404).json({ mensaje: 'Correo electrónico no encontrado' });
         }
 
-        if (usuario.contrasenia !== contrasenia) {
+        if (usuario.contrasenia !== password) {
             return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
         }
 
         res.json({ mensaje: 'Inicio de sesión exitoso', usuario });
-    } catch (error) {
+    } catch (error) { 
+      console.log(error)
         res.status(500).json({ mensaje: 'Error al iniciar sesión', error });
     }
 });
