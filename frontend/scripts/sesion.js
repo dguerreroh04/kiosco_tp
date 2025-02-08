@@ -14,6 +14,7 @@ document.getElementById('Iniciar sesion').addEventListener('submit', function(ev
   .then(response => response.json())
   .then(data => {
       if (data.mensaje === 'Inicio de sesión exitoso') {
+          sessionStorage.setItem("id_usuario", data.id);
           window.location.href = 'cuenta.html';
       } else {
           alert(data.mensaje);

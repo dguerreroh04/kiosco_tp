@@ -31,6 +31,7 @@ function crear(){
 
         if (respuesta.ok) {
             alert(data.mensaje);
+            sessionStorage.setItem("id_usuario", data.id);
             window.location.href = "inicio.html";
         } else {
             alert(data.mensaje);

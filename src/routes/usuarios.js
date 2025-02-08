@@ -98,8 +98,7 @@ router.post('/', async (req,res) =>{
 
   const usuario = await prisma.usuario.create({data:{ nombre, edad, mail, nro_tel, dni, contrasenia}})
 
-  res.status(201).json({mensaje: 'Usuario creado exitosamente, porfavor verifique sus datos',usuario})
-
+  res.status(201).json({mensaje: 'Usuario creado exitosamente, porfavor verifique sus datos',usuario, id: usuario.id})
 })
 
 
@@ -189,7 +188,9 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
         }
 
-        res.json({ mensaje: 'Inicio de sesión exitoso', usuario });
+        res.json({ mensaje: 'Inicio de sesión exitoso', usuario, 
+          id: usuario.id
+        });
     } catch (error) { 
       console.log(error)
         res.status(500).json({ mensaje: 'Error al iniciar sesión', error });
