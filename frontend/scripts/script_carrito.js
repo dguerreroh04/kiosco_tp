@@ -15,13 +15,15 @@ function showCarrito() {
         console.log(productos);
         container.innerHTML = '';
 
+
         productos.forEach(producto => {
             let productoDiv = document.createElement('div')
             productoDiv.classList.add('card', 'border-success', 'mb-3', 'card-carrito');
+            productoDiv.style.width = '700px';
             productoDiv.innerHTML = `
-                <img src="${producto.producto.imagen}" alt="Producto" style="width: 180px; grid-area: img;">
+                <img src="${producto.producto.imagen}" alt="Producto" style="width: 150px; grid-area: img;">
                 <h5 class="card-title nombre" style="grid-area: nombre;">${producto.producto.nombre}</h5>
-                <h5 class="card-text precio" style="grid-area: precio;">${producto.producto.precio}</h5>
+                <h5 class="card-text precio" style="grid-area: precio;">$${producto.producto.precio_unidad}</h5>
                 <div class="contador">
                     <button class="disminuir">-</button>
                     <div class="valor">1</div>

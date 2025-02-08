@@ -6,7 +6,12 @@ const prisma = new PrismaClient()
 //para obtener todos los productos selecionados
 router.get('/', async (req, res) => {
     try{
-        const productos_seleccionados = await prisma.productos_seleccionados.findMany()
+        const productos_seleccionados = await prisma.productos_seleccionados.findMany({
+            include: {
+                producto: true,
+                comprador: true
+            }
+        });
         res.json(productos_seleccionados)
     }catch(error){
         res.status(500).json({mensaje:'Error al obtener los productos seleccionados',error})

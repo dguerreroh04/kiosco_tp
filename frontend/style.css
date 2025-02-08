@@ -55,6 +55,7 @@ body{
 .container_carrito {
     max-width: 100%;
     display: flex;
+    justify-content: space-evenly;
     flex-direction: row;
     padding-top: 10px;
 }
