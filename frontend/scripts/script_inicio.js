@@ -1,6 +1,11 @@
 window.onload = function() {
     showProducts();
 }
+
+function obtener_id_comprador() {
+    return sessionStorage.getItem("id_usuario");
+}
+
 function showProducts() {
     fetch('http://localhost:3000/api/v1/productos')
     .then(response => response.json())
@@ -33,21 +38,31 @@ function showProducts() {
 }
 
 function añadir_carrito(id_producto) {
+    const id_usuario = obtener_id_comprador();
+
+    if (!id_usuario) {
+        alert("Debe iniciar sesión para añadir productos al carrito.");
+        return;
+    }
     fetch ('http://localhost:3000/api/v1/productos_seleccionados', {
         method: 'POST',
         headers: {
             'Content-type': 'application/json'
         },
         body: JSON.stringify({
+            id_usuario: id_usuario,
             id_producto: id_producto,
-            id_comprador: id_comprador,
             cantidad: 1
         })
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Producto añadido al carrito:", data);
-        alert("Producto añadido al carrito con exito");
+        if (data.mensaje) {
+            alert(data.mensaje);
+        } else {
+            console.log("Producto añadido al carrito:", data);
+            alert("Producto añadido al carrito con exito");
+        }
     })
     .catch(error => console.error("Error al añadir al carrito:", error));
 }

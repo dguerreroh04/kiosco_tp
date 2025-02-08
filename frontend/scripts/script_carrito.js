@@ -2,6 +2,10 @@ window.onload = function() {
     showCarrito();
 }
 
+function obtener_id_comprador() {
+    return sessionStorage.getItem("id_comprador");
+}
+
 function showCarrito() {
     let container = document.getElementById('lista_productos');
 
@@ -60,14 +64,14 @@ function confirmar_compra() {
             return;
         }
         let total = productos.reduce((sum, producto) => sum + (producto.producto.precio * producto.cantidad), 0);
-        let id_comprador = 1;
+        let id_comprador = obtener_id_comprador();
         fetch('http://localhost:3000/api/v1/ticket', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id_comprador: id_comprador,
+                id_comprador: obtener_id_comprador(),
                 nombre_kiosco: 'Kiosco Informatico',
                 Domicilio: 'Paseo Colon 850',
                 forma_pago: metodo_pago.nextElementSibling.textContent.trim(),
