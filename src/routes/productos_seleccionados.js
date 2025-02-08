@@ -6,7 +6,12 @@ const prisma = new PrismaClient()
 //para obtener todos los productos selecionados
 router.get('/', async (req, res) => {
     try{
-        const productos_seleccionados = await prisma.productos_seleccionados.findMany()
+        const productos_seleccionados = await prisma.productos_seleccionados.findMany({
+            include: {
+                producto: true,
+                comprador: true
+            }
+        });
         res.json(productos_seleccionados)
     }catch(error){
         res.status(500).json({mensaje:'Error al obtener los productos seleccionados',error})
@@ -68,7 +73,7 @@ router.post('/', async (req, res) => {
         if (!producto) {
             return res.status(404).json({mensaje:'No se encontro el producto, pruebe con otro id'})
         }
-        const producto_repetido = await prisma.productos_seleccionados.findUnique({
+        const producto_repetido = await prisma.productos_seleccionados.findFirst({
             where: {
                 id_comprador: id_usuario,
                 id_producto: id_producto
