@@ -68,7 +68,7 @@ router.post('/', async (req, res) => {
         if (!producto) {
             return res.status(404).json({mensaje:'No se encontro el producto, pruebe con otro id'})
         }
-        const producto_repetido = await prisma.productos_seleccionados.findUnique({
+        const producto_repetido = await prisma.productos_seleccionados.findFirst({
             where: {
                 id_comprador: id_usuario,
                 id_producto: id_producto
