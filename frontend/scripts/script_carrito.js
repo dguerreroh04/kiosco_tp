@@ -3,7 +3,7 @@ window.onload = function() {
 }
 
 function obtener_id_comprador() {
-    return sessionStorage.getItem("id_comprador");
+    return sessionStorage.getItem("id_usuario");
 }
 
 function showCarrito() {
@@ -65,17 +65,19 @@ function confirmar_compra() {
             alert("El carrito esta vacio");
             return;
         }
-        let total = productos.reduce((sum, producto) => sum + (producto.producto.precio * producto.cantidad), 0);
-        let id_comprador = obtener_id_comprador();
+        let total = 0
+        productos.forEach(producto => {
+            total += (parseInt(producto.producto.precio_unidad) * producto.cantidad)
+        })
         fetch('http://localhost:3000/api/v1/ticket', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id_comprador: obtener_id_comprador(),
+                id_comprador: parseInt(obtener_id_comprador()),
                 nombre_kiosco: 'Kiosco Informatico',
-                Domicilio: 'Paseo Colon 850',
+                domicilio: 'Paseo Colon 850',
                 forma_pago: metodo_pago.nextElementSibling.textContent.trim(),
                 total: total
             }) 
@@ -84,7 +86,7 @@ function confirmar_compra() {
         .then(data => {
             console.log("Ticket creado", data);
             document.getElementById("alert").style.display = "flex";
-            return fetch('http://localhost:3000/api/v1/productos_seleccionados/vaciar', { method: 'DELETE' });
+            return fetch(`http://localhost:3000/api/v1/productos_seleccionados/${obtener_id_comprador()}`, { method: 'DELETE' });
         })
         .then(() => showCarrito())
         .catch(error => console.error("Error al generar ticket", error));

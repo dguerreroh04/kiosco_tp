@@ -46,13 +46,16 @@ router.get('/fecha_venta/:fecha_venta', async(req,res)=>{
 
 //crear ticket:
 router.post('/', async (req,res)=>{
-    const { id_comprador, lista_prod, forma_pago } = req.body
-
-    if(!id_comprador || !lista_prod || !forma_pago){
+    const id_comprador = req.body.id_comprador
+    const nombre_kiosco = req.body.nombre_kiosco
+    const domicilio = req.body.domicilio
+    const forma_pago = req.body.forma_pago
+    const total = req.body.total
+    if(!id_comprador || !forma_pago || !nombre_kiosco || !domicilio || !total){
         return res.status(400).json({mensaje: 'Faltan datos para completar el ticket'})
     }
 
-    const formas_de_pago = ['Crédito', 'Débito', 'Transferencia']
+    const formas_de_pago = ['Tarjeta de Crédito', 'Tarjeta de Débito', 'Transferencia']
     if(!formas_de_pago.includes(forma_pago)){
         return res.status(400).json({mensaje: 'Medio de pago no valido'})
     }
@@ -62,23 +65,14 @@ router.post('/', async (req,res)=>{
             where:{id:id_comprador}
         })
         if(!comprador){return res.status(404).json({mensaje:'No se encontro el comprador'})}
-
-        let total = 0
-        for(const{id_producto,cantidad} of lista_prod){
-            const producto = await prisma.producto.findUnique({
-                where: {id:id_producto}
-            })
-            if(!producto){return res.status(404).json({mensaje:'No se encontro el producto'})}
-            total += Number(producto.precio_unidad) * cantidad
-        }
         const ticket= await prisma.ticket.create({
             data:{                
-                nombre_kiosco: 'Kiosco Informatico',
-                Domicilio: 'Paseo Colon 850', 
-                id_comprador,
+                nombre_kiosco: nombre_kiosco,
+                Domicilio: domicilio, 
+                id_comprador: id_comprador,
                 fecha_venta: new Date(),
-                forma_pago,
-                total
+                forma_pago: forma_pago,
+                total: total
             }
         })
         res.status(201).json({mensaje:'Ticket creado exitosamente, verifique los datos de compra',ticket})
