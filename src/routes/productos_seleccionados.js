@@ -128,13 +128,14 @@ router.delete('/:id_comprador',async (req,res)=> {
         if (!productos_eliminados) {
             return res.sendStatus(404).json({mensaje: 'No hay productos seleccionados'})
         }
-        await prisma.productos_seleccionados.delete({
+        await prisma.productos_seleccionados.deleteMany({
             where: {
                 id_comprador: parseInt(req.params.id_comprador)
             }
         })
         res.send(productos_eliminados)
     } catch (error) {
+        console.log(error)
         res.status(500).json({mensaje: 'Error al eliminar los productos',error})
     }
 })
