@@ -26,8 +26,8 @@ function showCarrito() {
                 <h5 class="card-text precio" style="grid-area: precio;">$${producto.producto.precio_unidad}</h5>
                 <div class="contador">
                     <button class="disminuir">-</button>
-                    <div class="valor">1</div>
-                    <button class="aumentar"">+</button>
+                    <div class="valor">${producto.cantidad}</div>
+                    <button type=button class="aumentar" onclick="aumentar_producto(${producto.id}, ${producto.cantidad})">+</button>
                 </div>
                 <p class="card-text descripcion" style="grid-area: descripcion;">${producto.producto.descripcion}</p>
                 <button type="button" class="btn btn-danger" style="grid-area: btn;" onclick="eliminar_del_carrito(${producto.id}, ${producto.id_comprador})">Eliminar</button>
@@ -36,6 +36,23 @@ function showCarrito() {
         });
     })
     .catch(error => console.error("Error al obtener el carrito", error));
+}
+
+function aumentar_producto(id_producto, cantidad) {
+    fetch('http://localhost:3000/api/v1/productos_seleccionados/' + id_producto, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            cantidad: parseInt(cantidad + 1)
+        })
+    })
+    .then(response => response.json())
+    .then(response => {
+        console.log(response)
+        showCarrito()
+    })
 }
 
 function eliminar_del_carrito(id_producto, id_comprador) {
