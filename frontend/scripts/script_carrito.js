@@ -8,15 +8,17 @@ function obtener_id_comprador() {
 
 function showCarrito() {
     let container = document.getElementById('lista_productos');
+    let totalCarrito = document.getElementById('total_carrito');
+    let total = 0;
 
     fetch('http://localhost:3000/api/v1/productos_seleccionados')
     .then(response => response.json())
     .then(productos => {
         console.log(productos);
-        container.innerHTML = '';
-
+        container.innerHTML = '<h2 class="titulo_carrito" >Tu Carrito</h2>';
 
         productos.forEach(producto => {
+            total += producto.producto.precio_unidad * producto.cantidad;
             let productoDiv = document.createElement('div')
             productoDiv.classList.add('card', 'border-success', 'mb-3', 'card-carrito');
             productoDiv.style.width = '700px';
@@ -34,6 +36,7 @@ function showCarrito() {
             `;
             container.appendChild(productoDiv);
         });
+        totalCarrito.textContent = '$' + total;
     })
     .catch(error => console.error("Error al obtener el carrito", error));
 }
