@@ -39,7 +39,6 @@ function showCarrito() {
 }
 
 function eliminar_del_carrito(id_producto) {
-    alert('Borrando producto ' + id_producto);
     fetch('http://localhost:3000/api/v1/productos_seleccionados/' + id_producto, {
         method: 'DELETE'
     })

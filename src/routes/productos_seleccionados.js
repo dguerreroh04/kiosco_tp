@@ -95,12 +95,11 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.delete('/:id_comprador/:id_producto',async (req,res)=> {
+router.delete('/:id',async (req,res)=> {
     try {
         const producto_eliminado = await prisma.productos_seleccionados.findUnique({
             where: {
-                id_comprador: parseInt(req.params.id_comprador),
-                id_producto: parseInt(req.params.id_producto)
+                id: parseInt(req.params.id)
             }
         })
         if (!producto_eliminado) {
@@ -108,8 +107,7 @@ router.delete('/:id_comprador/:id_producto',async (req,res)=> {
         }
         await prisma.productos_seleccionados.delete({
             where: {
-                id_comprador: parseInt(req.params.id_comprador),
-                id_producto: parseInt(req.params.id_producto)
+                id: parseInt(req.params.id)
             }
         })
         res.send(producto_eliminado)
