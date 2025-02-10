@@ -27,10 +27,10 @@ function showCarrito() {
                 <div class="contador">
                     <button class="disminuir">-</button>
                     <div class="valor">1</div>
-                    <button class="aumentar">+</button>
+                    <button class="aumentar"">+</button>
                 </div>
                 <p class="card-text descripcion" style="grid-area: descripcion;">${producto.producto.descripcion}</p>
-                <button type="button" class="btn btn-danger" style="grid-area: btn;" onclick="eliminar_del_carrito(${producto.id})">Eliminar</button>
+                <button type="button" class="btn btn-danger" style="grid-area: btn;" onclick="eliminar_del_carrito(${producto.id}, ${producto.id_comprador})">Eliminar</button>
             `;
             container.appendChild(productoDiv);
         });
@@ -38,8 +38,8 @@ function showCarrito() {
     .catch(error => console.error("Error al obtener el carrito", error));
 }
 
-function eliminar_del_carrito(id_producto) {
-    fetch('http://localhost:3000/api/v1/productos_seleccionados/' + id_producto, {
+function eliminar_del_carrito(id_producto, id_comprador) {
+    fetch(`http://localhost:3000/api/v1/productos_seleccionados/${id_comprador}/${id_producto}`, {
         method: 'DELETE'
     })
     .then(response => response.json())
