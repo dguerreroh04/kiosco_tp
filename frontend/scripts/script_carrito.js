@@ -25,7 +25,7 @@ function showCarrito() {
                 <h5 class="card-title nombre" style="grid-area: nombre;">${producto.producto.nombre}</h5>
                 <h5 class="card-text precio" style="grid-area: precio;">$${producto.producto.precio_unidad}</h5>
                 <div class="contador">
-                    <button class="disminuir">-</button>
+                    <button type=button class="disminuir" onclick="disminuir_producto(${producto.id}, ${producto.cantidad})">-</button>
                     <div class="valor">${producto.cantidad}</div>
                     <button type=button class="aumentar" onclick="aumentar_producto(${producto.id}, ${producto.cantidad})">+</button>
                 </div>
@@ -36,6 +36,26 @@ function showCarrito() {
         });
     })
     .catch(error => console.error("Error al obtener el carrito", error));
+}
+
+function disminuir_producto(id_producto, cantidad) {
+    if (parseInt(cantidad) === 1) {
+        return alert("La cantidad del producto no puede ser menor que 1")
+    }
+    fetch('http://localhost:3000/api/v1/productos_seleccionados/' + id_producto, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            cantidad: parseInt(cantidad - 1)
+        })
+    })
+    .then(response => response.json())
+    .then(response => {
+        console.log(response)
+        showCarrito()
+    })
 }
 
 function aumentar_producto(id_producto, cantidad) {
