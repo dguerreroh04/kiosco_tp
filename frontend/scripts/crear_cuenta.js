@@ -9,14 +9,7 @@ function crear(){
         const dni = document.getElementById("dni").value;
         const contrasenia = document.getElementById("contraseña").value;
 
-        const datosUsuario = {
-        nombre,
-        edad,
-        mail,
-        nro_tel,
-        dni,
-        contrasenia
-        };
+        const datosUsuario = {nombre, edad, mail, nro_tel, dni, contrasenia};
 
         try {
         const respuesta = await fetch('http://localhost:3000/api/v1/usuarios', {

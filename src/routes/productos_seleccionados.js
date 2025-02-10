@@ -20,9 +20,9 @@ router.get('/', async (req, res) => {
 
 
 //actualizar con id_comprador e id_producto
-router.put('/:id_comprador/:id_producto', async (req,res)=> {
-    const {id_comprador,id_producto} = req.params
-    const {cantidad} = req.body
+router.put('/:id', async (req,res)=> {
+    const id = parseInt(req.params.id)
+    const cantidad = parseInt(req.body.cantidad)
 
     if(!cantidad || cantidad <= 0){
         return res.status(400).json({mensaje:'Ingrese una cantidad mayor a cero'})
@@ -30,18 +30,25 @@ router.put('/:id_comprador/:id_producto', async (req,res)=> {
 
     try{
         const productoSeleccionado = await prisma.productos_seleccionados.findUnique({
-            where:{id_comprador_id_producto:{id_comprador: Number(id_comprador), id_producto: Number(id_producto)}}
+            where: {
+                id: id
+            }
         })
 
         if(!productoSeleccionado){
             return res.status(404).json({mensaje:'No se encontro el producto'})
         }
         const producto_actualizado = await prisma.productos_seleccionados.update({
-            where: {id_comprador_id_producto:{id_comprador: Number(id_comprador), id_producto: Number(id_producto)}},
-            data:{cantidad}
+            where: {
+                id: id
+            },
+            data: {
+                cantidad: cantidad
+            }
         })
         res.json({mensaje:'Se actualizo el producto',producto: producto_actualizado})
     }catch(error){
+        console.log(error)
         res.status(500).json({mensaje:'Error al obtener la informacion',error})
     }
 })
@@ -95,12 +102,12 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.delete('/:id_comprador/:id_producto',async (req,res)=> {
+router.delete('/:id_comprador/:id',async (req,res)=> {
     try {
         const producto_eliminado = await prisma.productos_seleccionados.findUnique({
             where: {
                 id_comprador: parseInt(req.params.id_comprador),
-                id_producto: parseInt(req.params.id_producto)
+                id: parseInt(req.params.id)
             }
         })
         if (!producto_eliminado) {
@@ -109,11 +116,12 @@ router.delete('/:id_comprador/:id_producto',async (req,res)=> {
         await prisma.productos_seleccionados.delete({
             where: {
                 id_comprador: parseInt(req.params.id_comprador),
-                id_producto: parseInt(req.params.id_producto)
+                id: parseInt(req.params.id)
             }
         })
         res.send(producto_eliminado)
     } catch (error) {
+        console.log(error)
         res.status(500).json({mensaje: 'Error al eliminar el producto',error})
     }
 })
