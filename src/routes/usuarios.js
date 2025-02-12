@@ -13,18 +13,21 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', async (req,res)=> {
-    const { id } = req.params
-    try{
-        const usuario = await prisma.usuario.findUnique({
-        where: {id: Number(id)}
-      })
-      if(!usuario){
-        return res.status(404).json({mensaje: 'Usuario no encontrado' })
-        }
-      res.json(usuario)
-    }catch (error){
-      res.status(500).json({mensaje: 'Error al obtener el usuario',error})
+  const id_usuario = Number(req.params.id)
+  try{
+    const usuario = await prisma.usuario.findUnique({
+      where: {
+        id: id_usuario
+      }
+    })
+    if(!usuario){
+      return res.status(404).json({mensaje: 'Usuario no encontrado' })
     }
+    res.json(usuario)
+  }catch (error){
+    console.log(error)
+    res.status(500).json({mensaje: 'Error al obtener el usuario',error})
+  }
 })
 
 router.get('/nombre/:nombre', async (req,res)=> {
