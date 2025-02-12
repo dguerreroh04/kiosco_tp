@@ -29,6 +29,7 @@ function mostrar_usuario() {
 }
 
 function guardar() {
+    const idUsuario = obtener_id_usuario();
     //actulizaacion de datos
     document.getElementById("guardarBtn").addEventListener("click", async function (event) {
         event.preventDefault();
