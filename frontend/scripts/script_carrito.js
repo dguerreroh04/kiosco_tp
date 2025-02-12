@@ -10,8 +10,8 @@ function showCarrito() {
     let container = document.getElementById('lista_productos');
     let totalCarrito = document.getElementById('total_carrito');
     let total = 0;
-
-    fetch('http://localhost:3000/api/v1/productos_seleccionados')
+    const id_comprador = obtener_id_comprador()
+    fetch(`http://localhost:3000/api/v1/productos_seleccionados/${id_comprador}`)
     .then(response => response.json())
     .then(productos => {
         console.log(productos);
