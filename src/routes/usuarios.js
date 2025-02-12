@@ -102,7 +102,7 @@ router.post('/', async (req,res) =>{
         contrasenia: contrasenia
       }
     })
-    res.status(201).json({mensaje: 'Usuario creado exitosamente, por favor verifique sus datos',usuario, id: usuario.id})
+    res.status(201).json({mensaje: 'Usuario creado exitosamente, por favor verifique sus datos', id: usuario.id})
   } catch (error) {
     
   }
@@ -171,7 +171,7 @@ router.put('/:id',async (req,res) =>{
 
     const usuario_modificado = await prisma.usuario.update({where: {id: Number(id)}, data: datos_actualizados})
 
-    res.json({mensaje:'Los datos se han modificado',usuario: datos_actualizados})
+    res.json({mensaje:'Los datos se han modificado'})
   }catch(error){
     res.status(500).json({mensaje: 'Error al modificar el usuario',error})
   }
