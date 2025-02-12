@@ -2,6 +2,7 @@
 
 window.onload = function() {
     mostrar_usuario();
+    mostrar_tickets();
 }
 
 function obtener_id_usuario() {
@@ -17,7 +18,7 @@ function mostrar_usuario() {
         let container = document.getElementById('datos_usuario');
         let usuarioDiv = document.createElement('div');
         usuarioDiv.classList.add('card', 'border-info', 'mb-3');
-        usuarioDiv.style.width = '500px';
+        usuarioDiv.style.width = '100%';
         usuarioDiv.style.height = '160px';
         usuarioDiv.innerHTML = `
             <p class="card-title">NOMBRE: ${usuario.nombre}</p>
@@ -92,4 +93,23 @@ function borrar() {
             alert("Hubo un problema al intentar eliminar tu cuenta.");
         }
     });
+}
+
+function mostrar_tickets() {
+    const id_usuario = obtener_id_usuario()
+    fetch(`http://localhost:3000/api/v1/ticket/${id_usuario}`)
+    .then(response => response.json())
+    .then( datos => {
+        console.log(datos)
+        let container_tickets = document.getElementById("container_ticket")
+        let ticketDiv = document.createElement('div')
+        ticketDiv.classList.add('card', 'border-info', 'mb-3');
+        ticketDiv.style.width = '50%';
+        ticketDiv.style.height = '160px';
+        ticketDiv.innerHTML = `
+            <p class="card-title">Fecha: ${datos.fecha_venta}</p>
+            <p class="card-title">Total: ${datos.total}</p>
+        `;
+        container_tickets.appendChild(ticketDiv); 
+    })
 }

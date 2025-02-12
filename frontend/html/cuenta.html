@@ -25,16 +25,21 @@
       </div>
     </div>
   </nav>
-  <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh; flex-direction: column; padding: 20px;">
-  <div class="container_info_cuenta" style="width: 100%; display: flex; flex-direction: column;" id="datos_usuario">
-    <h1 style="display:flex; justify-content: center; margin-top: 20px;font-size: 3.5em;">Tus Datos</h1>
-    <div>
-
+  <div style="display: flex; justify-content: space-evenly; align-items: flex-start; min-height: 100vh; flex-direction: row; padding: 20px; width: 100%;">
+    <div style="width: 50%; display: flex; justify-content: center; flex-direction: column; align-items: center;">
+      <div class="container_info_cuenta" style="width: 50%; display: flex; flex-direction: column;" id="datos_usuario">
+        <h1 style="display:flex; justify-content: center; margin-top: 20px;font-size: 3.5em;">Tus Datos</h1>
+        <div>
+        </div>
+      </div>
+      <div id="container_ticket">
+        <h2>Tus Tickets</h2>
+      </div>
     </div>
-  </div>
+  
 
-  <div class="container_modificar_cuenta" style="width: 100%; display: flex; flex-direction: column;">
-    <h1 style="display:flex; width: 100%; justify-content: center;font-size: 3.5em;">Tu Cuenta</h1>
+  <div class="container_modificar_cuenta" style="width: 50%; display: flex; flex-direction: column;">
+    <h1 style="display:flex; width: 100%; justify-content: center;font-size: 3.5em;">Modificar Datos</h1>
 
     <div class="nombre">
       <label class="label">Nombre</label>
@@ -82,7 +87,7 @@
       <div class="control">
           <button class="button1" onclick="guardar()">Guardar Cambios</button>
       </div>
-  
+
       <div class="control">
           <button class="button2" id="borrarBtn" onclick="borrar()">Borrar Cuenta</button>
       </div>

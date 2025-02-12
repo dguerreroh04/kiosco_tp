@@ -169,7 +169,7 @@ body{
 }
 
 .container_info_cuenta {
-    max-width: 325px;
+    max-width: 100%;
     margin: 10px;
     padding: 20px;
     background-color: #a0a0a0af;

@@ -27,6 +27,23 @@ router.get('/:id',async (req,res)=> {
     }
   })
 
+// 
+router.get('/:id_comprador', async (req, res) => {
+    try{
+        const tickets_seleccionados = await prisma.tickets_seleccionados.findMany({
+            where: {
+                id_comprador: parseInt(req.params.id_comprador)
+            },
+            include: {
+                comprador: true
+            }
+        });
+        res.json(tickets_seleccionados)
+    }catch(error){
+        res.status(500).json({mensaje:'Error al obtener los tickets seleccionados',error})
+    }
+})
+
 router.get('/fecha_venta/:fecha_venta', async(req,res)=>{
     const { fecha_venta } = req.params
     try{
