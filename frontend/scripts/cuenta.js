@@ -1,55 +1,67 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const nombreInput = document.querySelector('.nombre .input');
-    const edadInput = document.querySelector('.edad .input');
-    const mailInput = document.querySelector('.mail .input');
-    const numtelInput = document.querySelector('.numtel .input');
-    const dniInput = document.querySelector('.dni .input');
-    const guardarBtn = document.getElementById('guardarBtn');
+window.onload = function() {
+    mostrar_usuario();
+}
 
-    //Cargar datos desde el almacenamiento local (si ya existen)
-    
-    if (localStorage.getItem('nombre')) nombreInput.value = localStorage.getItem('nombre');
-    if (localStorage.getItem('edad')) edadInput.value = localStorage.getItem('edad');
-    if (localStorage.getItem('mail')) mailInput.value = localStorage.getItem('mail');
-    if (localStorage.getItem('numtel')) numtelInput.value = localStorage.getItem('numtel');
-    if (localStorage.getItem('dni')) dniInput.value = localStorage.getItem('dni');
+function obtener_id_usuario() {
+    return sessionStorage.getItem("id_usuario");
+}
 
-    guardarBtn.addEventListener('click', function (event) {
+function mostrar_usuario() {
+    const id_usuario = obtener_id_usuario()
+    fetch(`http://localhost:3000/api/v1/usuarios/${id_usuario}`)
+    .then(response => response.json())
+    .then(usuario => {
+        console.log(usuario)
+        let container = document.getElementById('datos_usuario');
+        let usuarioDiv = document.createElement('div');
+        usuarioDiv.classList.add('card', 'border-info', 'mb-3');
+        usuarioDiv.style.width = '500px';
+        usuarioDiv.style.height = '160px';
+        usuarioDiv.innerHTML = `
+            <p class="card-title">NOMBRE: ${usuario.nombre}</p>
+            <p class="card-title">EDAD: ${usuario.edad}</p>
+            <p class="card-title">MAIL: ${usuario.mail}</p>
+            <p class="card-title">TELEFONO: ${usuario.nro_tel}</p>
+            <p class="card-title">DNI: ${usuario.dni}</p>
+        `;
+        container.appendChild(usuarioDiv);
+    })
+}
+
+function guardar() {
+    //actulizaacion de datos
+    document.getElementById("guardarBtn").addEventListener("click", async function (event) {
         event.preventDefault();
 
-        const datos = {
+        const datosActualizados = {
             nombre: nombreInput.value,
-            edad: pasrseInt(edadInput.value), 
+            edad: edadInput.value,
             mail: mailInput.value,
-            nro_telefono: numtelInput.value,
-            dni: parseInt(dniInput.value), 
+            nro_tel: numTelInput.value,
+            dni: dniInput.value,
+            contrasenia: contraseniaInput.value
         };
 
-        localStorage.setItem('nombre', datos.nombre);
-        localStorage.setItem('edad', datos.edad);
-        localStorage.setItem('mail', datos.mail);
-        localStorage.setItem('numtel', datos.nro_telefono);
-        localStorage.setItem('dni', datos.dni);
+        try {
+            //envio de datos
+            const response = await fetch(`http://localhost:3000/api/v1/usuarios/${idUsuario}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(datosActualizados),
+            });
 
-        //Envio de datos al backend
-        fetch('http://localhost:3000/api/v1/usuarios', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(datos)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.mensaje) {
-                alert('Datos guardados en la base de datos y en localStorage');
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(data.mensaje || "Datos actualizados correctamente");
             } else {
-                alert('Error: ' + JSON.stringify(data));
+                alert(data.mensaje || "Error al actualizar los datos");
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Hubo un error al guardar los datos en la base de datos');
-        });
+        } catch (error) {
+            console.error("Error al actualizar los datos ", error);
+            alert('Hubo un problema al actualizar los datos de tu cuenta.');
+        }
     });
-});
+};
