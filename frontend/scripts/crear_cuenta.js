@@ -8,7 +8,7 @@ function crear(){
 
     const datosUsuario = {nombre, edad, mail, nro_tel, dni, contrasenia};
 
-    const respuesta = fetch('http://localhost:3000/api/v1/usuarios', {
+    fetch('http://localhost:3000/api/v1/usuarios', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json'

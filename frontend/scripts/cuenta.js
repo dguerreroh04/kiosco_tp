@@ -31,38 +31,31 @@ function mostrar_usuario() {
 function guardar() {
     const idUsuario = obtener_id_usuario();
     //actulizaacion de datos
-    document.getElementById("guardarBtn").addEventListener("click", async function (event) {
-        event.preventDefault();
 
-        const datosActualizados = {
-            nombre: nombreInput.value,
-            edad: edadInput.value,
-            mail: mailInput.value,
-            nro_tel: numTelInput.value,
-            dni: dniInput.value,
-            contrasenia: contraseniaInput.value
-        };
-
-        try {
-            //envio de datos
-            const response = await fetch(`http://localhost:3000/api/v1/usuarios/${idUsuario}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(datosActualizados),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                alert(data.mensaje || "Datos actualizados correctamente");
+    const datosActualizados = {
+        nombre: nombreInput.value,
+        edad: edadInput.value,
+        mail: mailInput.value,
+        nro_tel: numTelInput.value,
+        dni: dniInput.value,
+        contrasenia: contraseniaInput.value
+    };
+        //envio de datos
+        fetch(`http://localhost:3000/api/v1/usuarios/${idUsuario}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(datosActualizados),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.mensaje !== 'Los datos se han modificado') {
+                alert(data.mensaje || "Error al actualizar los datos")
             } else {
-                alert(data.mensaje || "Error al actualizar los datos");
+                alert(data.mensaje || "Datos actualizados correctamente");
+                location.reload()
             }
-        } catch (error) {
-            console.error("Error al actualizar los datos ", error);
-            alert('Hubo un problema al actualizar los datos de tu cuenta.');
-        }
-    });
-};
+        })
+        .catch(error => console.error("Error al crear usuario:", error));
+}
