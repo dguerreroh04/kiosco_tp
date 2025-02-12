@@ -1,4 +1,9 @@
 window.onload = function() {
+    const id_usuario = obtener_id_comprador()
+    if (!id_usuario) {
+        alert("No hay secion iniciada, inicie sesion o cree un usuario.")
+        location.replace('http://127.0.0.1:5500/frontend/html/inicio_cuenta.html')
+    }
     showProducts();
 }
 
@@ -23,7 +28,7 @@ function showProducts() {
                 productoDiv.style.height = '365px';
                 productoDiv.innerHTML = `
                     <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 170px; height:200px;">
-                <h5 class="card-title">${producto.nombre}</h5>
+                    <h5 class="card-title">${producto.nombre}</h5>
                     <p class="card-text">$${producto.precio_unidad}</p>
                     <p class="card-text">${producto.descripcion}</p>
                     <button type="button" class="btn btn-primary btn-prod" onclick="añadir_carrito(${producto.id})">Añadir al carrito</button>
