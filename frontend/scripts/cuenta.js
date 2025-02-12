@@ -1,3 +1,5 @@
+// *Modificar datos*
+
 window.onload = function() {
     mostrar_usuario();
 }
@@ -58,4 +60,36 @@ function guardar() {
             }
         })
         .catch(error => console.error("Error al crear usuario:", error));
+}
+
+// *Borrar cuenta*
+
+function borrar() {
+
+    document.getElementById("borrarBtn").addEventListener("click", async function () {
+        if (!confirm("¿Estás seguro de que quieres eliminar tu cuenta?")) {
+            return;
+        }
+
+        const id_usuario = obtener_id_usuario();
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/v1/usuarios/${id_usuario}`, {
+                method: "DELETE",
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(data.mensaje || "Cuenta eliminada correctamente");
+                sessionStorage.removeItem("id_usuario"); 
+                window.location.href = "inicio_cuenta.html"; 
+            } else {
+                alert(data.mensaje || "Ocurrio un error al eliminar la cuenta");
+            }
+        } catch (error) {
+            console.error("Error al eliminar la cuenta:", error);
+            alert("Hubo un problema al intentar eliminar tu cuenta.");
+        }
+    });
 }
