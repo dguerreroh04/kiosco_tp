@@ -18,6 +18,41 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.get('/:id_comprador/:id',async (req,res)=> {
+    try {
+        const producto_buscado = await prisma.productos_seleccionados.findUnique({
+            where: {
+                id_comprador: parseInt(req.params.id_comprador),
+                id: parseInt(req.params.id)
+            }
+        })
+        if (!producto_buscado) {
+            return res.sendStatus(404).json({mensaje: 'Producto no encontrado'})
+        }
+        res.send(producto_buscado)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({mensaje: 'Error al buscar el producto',error})
+    }
+})
+
+router.get('/:id_comprador', async (req, res) => {
+    try{
+        const productos_seleccionados = await prisma.productos_seleccionados.findMany({
+            where: {
+                id_comprador: parseInt(req.params.id_comprador)
+            },
+            include: {
+                producto: true,
+                comprador: true
+            }
+        });
+        res.json(productos_seleccionados)
+    }catch(error){
+        res.status(500).json({mensaje:'Error al obtener los productos seleccionados',error})
+    }
+})
+
 
 //actualizar con id_comprador e id_producto
 router.put('/:id', async (req,res)=> {
