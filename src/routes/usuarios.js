@@ -68,46 +68,52 @@ router.post('/', async (req,res) =>{
   const contrasenia = req.body.contrasenia
   const direc_email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   const numero_telefono = /^\d{8}$/ // Numero valido de 8 digitos
-
-  if(!nombre||!edad||!mail||!nro_tel||!dni||!contrasenia){
-    return res.status(400).json({mensaje: 'Todos los campos son obligatorios'})
+  try {
+    if(!nombre||!edad||!mail||!nro_tel||!dni||!contrasenia){
+      return res.status(400).json({mensaje: 'Todos los campos son obligatorios'})
     }
-
-  if(nombre.length < 3){
-    return res.status(400).json({mensaje: 'Nombre demasiado corto'})
+    if(nombre.length < 3){
+      return res.status(400).json({mensaje: 'Nombre demasiado corto'})
     }
-
-  if(parseInt(edad) <= 17){
-    return res.status(400).json({mensaje: 'Se debe tener al menos 18 años'})
+    if(edad <= 17){
+      return res.status(400).json({mensaje: 'Se debe tener al menos 18 años'})
     }
-
-  if(!direc_email.test(mail)){
-    return res.status(400).json({mensaje: 'Ingrese una dirección de correo electronico valida'})
+    if(!direc_email.test(mail)){
+      return res.status(400).json({mensaje: 'Ingrese una dirección de correo electronico valida'})
     }
-
-  if(!numero_telefono.test(nro_tel)){
-    return res.status(400).json({mensaje: 'Ingrese un número de telefono válido de 8 digitos'})
+    if(!numero_telefono.test(nro_tel)){
+      return res.status(400).json({mensaje: 'Ingrese un número de telefono válido de 8 digitos'})
     }
-
-  if(dni < 1000000 || dni > 99999999){
-   return res.status(400).json({mensaje: 'Ingrese un DNI valido'})
+    if(dni < 1000000 || dni > 99999999){
+     return res.status(400).json({mensaje: 'Ingrese un DNI valido'})
     }
-
+    const nombre_usado = await prisma.usuario.findUnique({
+      where: {nombre}
+    })
+    if(nombre_usado){return res.status(400).json({mensaje: 'Nombre no disponible, por favor elija otro'})}
   
-  const nombre_usado = await prisma.usuario.findUnique({
-    where: {nombre}
-  })
-  if(nombre_usado){return res.status(400).json({mensaje: 'Nombre no disponible, porfavor elija otro'})}
-
-  const usuario = await prisma.usuario.create({data:{ nombre, edad, mail, nro_tel, dni, contrasenia}})
-
-  res.status(201).json({mensaje: 'Usuario creado exitosamente, porfavor verifique sus datos',usuario, id: usuario.id})
+    const usuario = await prisma.usuario.create({
+      data: {
+        nombre: nombre,
+        edad: edad,
+        mail: mail,
+        nro_tel: nro_tel,
+        dni: dni, 
+        contrasenia: contrasenia
+      }
+    })
+    res.status(201).json({mensaje: 'Usuario creado exitosamente, por favor verifique sus datos',usuario, id: usuario.id})
+  } catch (error) {
+    
+  }
+  
+  
 })
 
 
 //modificar datos de usuario:
 router.put('/:id',async (req,res) =>{
-  const {id} = req.params
+  const id = req.params.id
   const nombre = req.body.nombre
   const edad = parseInt(req.body.edad)
   const mail = req.body.mail
@@ -121,81 +127,79 @@ router.put('/:id',async (req,res) =>{
 
     const datos_actualizados = {}
 
-        if (nombre) {
+    if (nombre) {
       if (nombre.length < 3) {return res.status(400).json({ mensaje: 'Nombre demasiado corto' })}
 
-            if (nombre !== usuario.nombre) {
+      if (nombre !== usuario.nombre) {
         const nombre_usado = await prisma.usuario.findUnique({ where: { nombre } })
-                if (nombre_usado) {
+        if (nombre_usado) {
           return res.status(400).json({ mensaje: 'Nombre no disponible, por favor elija otro' })
-                }
-            }
-            datos_actualizados.nombre = nombre;
         }
+      }
+      datos_actualizados.nombre = nombre;
+    }
 
     if(edad){
       if(edad <= 17){
         return res.status(400).json({mensaje: 'Se debe tener al menos 18 años'})
-            }
+      }
       datos_actualizados.edad = edad
-        }
+    }
 
     if(mail){
       const direc_email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       if(!direc_email.test(mail)){
         return res.status(400).json({mensaje: 'Ingrese un correo electronico válido'})
-            }
+      }
       datos_actualizados.mail = mail
-        }
+    }
 
     if(nro_tel){
       const numero_telefono = /^\d{10,14}$/
       if(!numero_telefono.test(nro_tel)){
         return res.status(400).json({mensaje: 'Ingrese un número de telefono válido entre 10-14 digitos'})
-            }
+      }
       datos_actualizados.nro_tel = nro_tel
-        }
+    }
 
     if(dni){
       if(dni < 1000000 || dni > 99999999){
         return res.status(400).json({mensaje: 'Ingrese un dni válido'})
-            }
+      }
       datos_actualizados.dni = dni
-        }
+    }
 
     const usuario_modificado = await prisma.usuario.update({where: {id: Number(id)}, data: datos_actualizados})
 
     res.json({mensaje:'Los datos se han modificado',usuario: datos_actualizados})
   }catch(error){
     res.status(500).json({mensaje: 'Error al modificar el usuario',error})
-    }
+  }
 });
 
 router.post('/login', async (req, res) => {
     const { password1 : password, username1 : username } = req.body;
 
     if (!password || !username) {
-        return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
+      return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
     }
 
     try {
         const usuario = await prisma.usuario.findUnique({
-            where: { mail : username }
+          where: { mail : username }
         });
 
         if (!usuario) {
-            return res.status(404).json({ mensaje: 'Correo electrónico no encontrado' });
+          return res.status(404).json({ mensaje: 'Correo electrónico no encontrado' });
         }
 
         if (usuario.contrasenia !== password) {
-            return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+          return res.status(404).json({ mensaje: 'Contraseña incorrecta' });
         }
 
-        res.json({ mensaje: 'Inicio de sesión exitoso', usuario, 
-          id: usuario.id
-        });
+        res.json({ mensaje: 'Inicio de sesión exitoso', id: usuario.id });
     } catch (error) { 
-      console.log(error)
+        console.log(error)
         res.status(500).json({ mensaje: 'Error al iniciar sesión', error });
     }
 });
