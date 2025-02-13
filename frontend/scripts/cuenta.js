@@ -1,11 +1,27 @@
 // *Modificar datos*
 
 window.onload = function() {
+    saludo_usuario();
     mostrar_usuario();
+    mostrar_tickets();
 }
 
 function obtener_id_usuario() {
     return sessionStorage.getItem("id_usuario");
+}
+
+function saludo_usuario() {
+    const id_usuario = obtener_id_usuario()
+    fetch(`http://localhost:3000/api/v1/usuarios/${id_usuario}`)
+    .then(response => response.json())
+    .then(usuario => {
+        let container = document.getElementById('saludo_usuario');
+        let saludo = document.createElement('div')
+        saludo.innerHTML = ` 
+            <p style="font-size: large; font-weight: bold;" >Hola ${usuario.nombre}!</p>
+        `;
+        container.appendChild(saludo);
+    })
 }
 
 function mostrar_usuario() {
@@ -16,8 +32,8 @@ function mostrar_usuario() {
         console.log(usuario)
         let container = document.getElementById('datos_usuario');
         let usuarioDiv = document.createElement('div');
-        usuarioDiv.classList.add('card', 'border-info', 'mb-3');
-        usuarioDiv.style.width = '500px';
+        usuarioDiv.classList.add('card', 'text-bg-secondary', 'mb-3');
+        usuarioDiv.style.width = '100%';
         usuarioDiv.style.height = '160px';
         usuarioDiv.innerHTML = `
             <p class="card-title">NOMBRE: ${usuario.nombre}</p>
@@ -65,31 +81,52 @@ function guardar() {
 // *Borrar cuenta*
 
 function borrar() {
+    if (!confirm("¿Estás seguro de que quieres eliminar tu cuenta?")) {
+        return;
+    }
+    const id_usuario = obtener_id_usuario();
 
-    document.getElementById("borrarBtn").addEventListener("click", async function () {
-        if (!confirm("¿Estás seguro de que quieres eliminar tu cuenta?")) {
-            return;
+    
+    fetch(`http://localhost:3000/api/v1/usuarios/${id_usuario}`, {
+        method: "DELETE",
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.mensaje !== 'El usuario ha sido eliminado') {
+            alert(data.mensaje);
+        } else {
+            alert(data.mensaje);
+            sessionStorage.removeItem("id_usuario"); 
+            window.location.href = "inicio.html";
         }
-
-        const id_usuario = obtener_id_usuario();
-
-        try {
-            const response = await fetch(`http://localhost:3000/api/v1/usuarios/${id_usuario}`, {
-                method: "DELETE",
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                alert(data.mensaje || "Cuenta eliminada correctamente");
-                sessionStorage.removeItem("id_usuario"); 
-                window.location.href = "inicio_cuenta.html"; 
-            } else {
-                alert(data.mensaje || "Ocurrio un error al eliminar la cuenta");
-            }
-        } catch (error) {
-            console.error("Error al eliminar la cuenta:", error);
-            alert("Hubo un problema al intentar eliminar tu cuenta.");
-        }
-    });
+    })
+    .catch(error => console.error("Error al eliminar cuenta:", error));
 }
+
+function mostrar_tickets() {
+    const id_usuario = obtener_id_usuario()
+    fetch(`http://localhost:3000/api/v1/ticket/${id_usuario}`)
+    .then(response => response.json())
+    .then( tickets => {
+        console.log(tickets)
+        tickets.forEach(ticket => {
+            let container_tickets = document.getElementById("container_ticket")
+            let ticketDiv = document.createElement('div')
+            ticketDiv.classList.add('card', 'text-bg-dark', 'mb-3');
+            ticketDiv.style.width = '100%';
+            ticketDiv.style.height = '100px';
+            ticketDiv.innerHTML = `
+                <p class="card-title">Fecha: ${ticket.fecha_venta.substring(0,10)}</p>
+                <p class="card-title">Total: ${ticket.total}</p>
+                <p class="card-title">Lista: ${ticket.productos_comprados}</p>
+            `;
+            container_tickets.appendChild(ticketDiv); 
+        });  
+    })
+}
+
+function cerrar_sesion() {
+    sessionStorage.clear();
+    window.location.href = "../html/inicio_cuenta.html";
+ }
+ 

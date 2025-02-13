@@ -1,9 +1,25 @@
 window.onload = function() {
+    saludo_usuario();
     showCarrito();
 }
 
 function obtener_id_comprador() {
     return sessionStorage.getItem("id_usuario");
+}
+
+function saludo_usuario() {
+    const id_usuario = obtener_id_comprador()
+    fetch(`http://localhost:3000/api/v1/usuarios/${id_usuario}`)
+    .then(response => response.json())
+    .then(usuario => {
+        console.log(usuario)
+        let container = document.getElementById('saludo_usuario');
+        let saludo = document.createElement('div')
+        saludo.innerHTML = ` 
+            <p style="font-size: large; font-weight: bold;" >Hola ${usuario.nombre}!</p>
+        `;
+        container.appendChild(saludo);
+    })
 }
 
 function showCarrito() {
@@ -91,13 +107,13 @@ function eliminar_del_carrito(id_producto, id_comprador) {
 
 function confirmar_compra() {
     const metodo_pago = document.querySelector('input[name="flexRadioDefault"]:checked');
-
+    const id_comprador = obtener_id_comprador()
     if (!metodo_pago) {
         alert("Seleccione un método de pago!");
         return;
     }
-
-    fetch('http://localhost:3000/api/v1/productos_seleccionados')
+    let lista_productos = " "
+    fetch(`http://localhost:3000/api/v1/productos_seleccionados/${id_comprador}`)
     .then(response => response.json())
     .then(productos => {
         if (productos.length === 0) {
@@ -107,6 +123,7 @@ function confirmar_compra() {
         let total = 0
         productos.forEach(producto => {
             total += (parseInt(producto.producto.precio_unidad) * producto.cantidad)
+            lista_productos += producto.producto.nombre + " X" + producto.cantidad + " "
         })
         fetch('http://localhost:3000/api/v1/ticket', {
             method: 'POST',
@@ -114,11 +131,12 @@ function confirmar_compra() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id_comprador: parseInt(obtener_id_comprador()),
+                id_comprador: parseInt(id_comprador),
                 nombre_kiosco: 'Kiosco Informatico',
                 domicilio: 'Paseo Colon 850',
                 forma_pago: metodo_pago.nextElementSibling.textContent.trim(),
-                total: total
+                total: total,
+                productos_comprados: lista_productos
             }) 
         })
         .then(response => response.json())

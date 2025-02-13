@@ -12,20 +12,42 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.get('/:id',async (req,res)=> {
-    const { id } = req.params 
+router.get('/:id_comprador/:id',async (req,res)=> {
+    const id = parseint(req.params.id)
+    const id_comprador = parseInt(req.params.id_comprador)
     try{
         const ticket = await prisma.ticket.findUnique({
-            where: {id:Number(id)}
+            where: {
+                id: id,
+                id_comprador: id_comprador
+            }
         })
         if(!ticket){
             return res.status(404).json({mensaje: 'No se encontro el ticket'})
         }
         res.json(ticket)
     }catch(error){
+        console.log(error)
         res.status(500).json({mensaje: 'Error al obtener el ticket',error})
     }
   })
+
+router.get('/:id_comprador', async (req, res) => {
+    try{
+        const tickets_seleccionados = await prisma.ticket.findMany({
+            where: {
+                id_comprador: parseInt(req.params.id_comprador)
+            },
+            include: {
+                comprador: true
+            }
+        });
+        res.json(tickets_seleccionados)
+    }catch(error){
+        console.log(error)
+        res.status(500).json({mensaje:'Error al obtener los tickets seleccionados',error})
+    }
+})
 
 router.get('/fecha_venta/:fecha_venta', async(req,res)=>{
     const { fecha_venta } = req.params
@@ -51,6 +73,7 @@ router.post('/', async (req,res)=>{
     const domicilio = req.body.domicilio
     const forma_pago = req.body.forma_pago
     const total = req.body.total
+    const lista_productos = req.body.productos_comprados
     if(!id_comprador || !forma_pago || !nombre_kiosco || !domicilio || !total){
         return res.status(400).json({mensaje: 'Faltan datos para completar el ticket'})
     }
@@ -72,11 +95,13 @@ router.post('/', async (req,res)=>{
                 id_comprador: id_comprador,
                 fecha_venta: new Date(),
                 forma_pago: forma_pago,
-                total: total
+                total: total,
+                productos_comprados: lista_productos
             }
         })
         res.status(201).json({mensaje:'Ticket creado exitosamente, verifique los datos de compra',ticket})
     }catch(error){
+        console.log(error)
         res.status(500).json({mensaje:'Error al generar el ticket',error})
     }
 })

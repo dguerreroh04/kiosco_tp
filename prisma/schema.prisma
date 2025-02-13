@@ -20,10 +20,10 @@ model Producto {
 
 model Productos_seleccionados {
   id           Int      @id @default(autoincrement())
-  producto     Producto @relation(fields: [id_producto], references: [id])
+  producto     Producto @relation(fields: [id_producto], references: [id], onDelete: Cascade)
   cantidad     Int
   id_producto  Int
-  comprador    Usuario  @relation(fields: [id_comprador], references: [id])
+  comprador    Usuario  @relation(fields: [id_comprador], references: [id], onDelete: Cascade)
   id_comprador Int
 }
 
@@ -44,9 +44,10 @@ model Ticket {
   id            Int      @id @default(autoincrement())
   nombre_kiosco String
   Domicilio     String
-  comprador     Usuario  @relation(fields: [id_comprador], references: [id])
+  comprador     Usuario  @relation(fields: [id_comprador], references: [id], onDelete: Cascade)
   id_comprador  Int
   fecha_venta   DateTime @default(now()) @db.Timestamp(6)
   forma_pago    String
   total         Int
+  productos_comprados String
 }
