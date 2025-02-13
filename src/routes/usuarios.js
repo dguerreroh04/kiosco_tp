@@ -46,16 +46,16 @@ router.get('/nombre/:nombre', async (req,res)=> {
   })
 
 router.delete('/:id', async (req,res)=> {
-    const {id} = req.params 
-    try{
-        await prisma.usuario.delete({
-        where: {id:Number(id)}
-      })
-      res.json({mensaje:`Usuario con ID: ${id} ha sido eliminado`})
-    }catch (error){
-      res.status(500).json({mensaje: 'Error al eleminar usuario',error})
-    }
-  })
+  const id = req.params.id 
+  try{
+      await prisma.usuario.delete({
+      where: {id:Number(id)}
+    })
+    res.json({mensaje:`El usuario ha sido eliminado`})
+  }catch (error){
+    res.status(500).json({mensaje: 'Error al eleminar usuario',error})
+  }
+})
 
 
 //creacion de usuario:

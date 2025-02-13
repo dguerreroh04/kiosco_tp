@@ -66,33 +66,26 @@ function guardar() {
 // *Borrar cuenta*
 
 function borrar() {
+    if (!confirm("¿Estás seguro de que quieres eliminar tu cuenta?")) {
+        return;
+    }
+    const id_usuario = obtener_id_usuario();
 
-    document.getElementById("borrarBtn").addEventListener("click", async function () {
-        if (!confirm("¿Estás seguro de que quieres eliminar tu cuenta?")) {
-            return;
+    
+    fetch(`http://localhost:3000/api/v1/usuarios/${id_usuario}`, {
+        method: "DELETE",
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.mensaje !== 'El usuario ha sido eliminado') {
+            alert(data.mensaje);
+        } else {
+            alert(data.mensaje);
+            sessionStorage.removeItem("id_usuario"); 
+            window.location.href = "inicio.html";
         }
-
-        const id_usuario = obtener_id_usuario();
-
-        try {
-            const response = await fetch(`http://localhost:3000/api/v1/usuarios/${id_usuario}`, {
-                method: "DELETE",
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                alert(data.mensaje || "Cuenta eliminada correctamente");
-                sessionStorage.removeItem("id_usuario"); 
-                window.location.href = "inicio_cuenta.html"; 
-            } else {
-                alert(data.mensaje || "Ocurrio un error al eliminar la cuenta");
-            }
-        } catch (error) {
-            console.error("Error al eliminar la cuenta:", error);
-            alert("Hubo un problema al intentar eliminar tu cuenta.");
-        }
-    });
+    })
+    .catch(error => console.error("Error al eliminar cuenta:", error));
 }
 
 function mostrar_tickets() {
