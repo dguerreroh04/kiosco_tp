@@ -15,7 +15,6 @@ function saludo_usuario() {
     fetch(`http://localhost:3000/api/v1/usuarios/${id_usuario}`)
     .then(response => response.json())
     .then(usuario => {
-        console.log(usuario)
         let container = document.getElementById('saludo_usuario');
         let saludo = document.createElement('div')
         saludo.innerHTML = ` 

@@ -68,7 +68,7 @@ function comprobar_tipos_datos(nombre, descripcion, nacional, categoria, imagen)
   if (typeof imagen === "string" || imagen == null) {
     tipos_correctos++
   }
-  if (typeof nacional === "boolean" || nacional == null) {
+  if (typeof Boolean(nacional) === "boolean" || nacional == null) {
     tipos_correctos++
   }
   if (tipos_correctos !== 5) {
@@ -131,45 +131,56 @@ router.put('/:id', async (req,res)=> {
   if (!producto) {
     return res.status(404).json({mensaje: 'Producto no encontrado' })
   }
+  const datos_actualizados = {}
   const nombre = req.body.nombre
-  let precio_unidad = Number(req.body.precio)
-  if (!precio_unidad) {
-    precio_unidad = producto.precio_unidad
-  }
+  const precio_unidad = Number(req.body.precio)
   const descripcion = req.body.descripcion
   const nacional = req.body.nacional
   const categoria = req.body.categoria
   const imagen = req.body.imagen
+  const formato_no_deseado = /\s+/
   if (comprobar_tipos_datos(nombre, descripcion, nacional, categoria, imagen) === false) {
     return res.status(400).json({mensaje: 'Los tipos de datos son erroneos'})
   }
-  if (nombre && nombre !== producto.nombre) {
-    const nombre_buscado = await prisma.producto.findUnique({
-      where: {
-        nombre: nombre
-      }
-    })
-    if (nombre_buscado) {
-      return res.status(400).json({mensaje: 'Ya existe un producto con ese nombre'})
+  if (nombre) {
+    if (nombre.length < 3) {return res.status(400).json({ mensaje: 'Nombre demasiado corto' })}
+    if (formato_no_deseado.test(nombre) === true) {
+      return res.status(400).json({ mensaje: 'No puede haber 2 o mas espacios seguidos' })
     }
+    if (nombre !== producto.nombre) {
+      const nombre_usado = await prisma.producto.findUnique({ where: { nombre } })
+      if (nombre_usado) {
+        return res.status(400).json({ mensaje: 'Nombre no disponible, por favor elija otro' })
+      }
+    }
+    datos_actualizados.nombre = nombre;
   }
-  if (imagen && imagen !== producto.imagen) {
+  if (precio_unidad) {
+    datos_actualizados.precio_unidad = precio_unidad
+  }
+  if (descripcion) {
+    if (formato_no_deseado.test(descripcion) === true) {
+      return res.status(400).json({ mensaje: 'No puede haber 2 o mas espacios seguidos' })
+    }
+    datos_actualizados.descripcion = descripcion
+  }
+  if (nacional) {
+    datos_actualizados.nacional = Boolean(nacional)
+  }
+  if (categoria) {
+    datos_actualizados.categoria = categoria
+  }
+  if (imagen) {
     if (validar_url_imagen(imagen) === false) {
       return res.status(400).json({mensaje: 'La url ingresada no es valida, pruebe con otra'})
     }
+    datos_actualizados.imagen = imagen
   }
   producto = await prisma.producto.update({
     where: {
       id: producto.id
     },
-    data: {
-      nombre: nombre,
-      precio_unidad: precio_unidad,
-      descripcion: descripcion,
-      nacional: nacional,
-      categoria: categoria,
-      imagen: imagen
-    }
+    data: datos_actualizados
   })
   res.status(201).json({mensaje: 'Producto modificado'})
 })

@@ -128,73 +128,7 @@ function borrar_producto(id_producto) {
 
 //Para modificar un producto
 function modificar_producto(id_producto){
+    sessionStorage.removeItem("id_producto"); 
     sessionStorage.setItem("id_producto", id_producto);
     window.location.href = "modificar_producto.html";
-
-
-
-    const nombre = document.getElementById("nombre").value;
-    const precio = parseFloat(document.getElementById("precio_unidad").value); 
-    const descripcion = document.getElementById("descripcion").value;
-    const nacional = document.getElementById("es_nacional").checked; 
-    const categoria = document.getElementById("categoria").value;
-    const imagen = document.getElementById("imagen_url").value;
-
-    if (!nombre || isNaN(precio) || !descripcion || !categoria) {
-        alert("Todos los campos son obligatorios y el precio debe ser un número válido")
-        return
-    }
-    const datosProducto = {nombre, precio, descripcion, nacional, categoria};
-
-    fetch(`http://localhost:3000/api/v1/productos/${id_producto}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datosProducto)
-    })
-    .then(response => response.json())
-    .then(data =>{
-        if(data.mensaje){
-            alert(data.mensaje)
-        }else{
-            alert("Se modifico el producto")
-        }
-        window.location.reload()
-    })
-}
-
-//Para crear un producto
-function crear_producto(){
-    sessionStorage.setItem("id_usuario", data.id);
-    window.location.href = "crear_producto.html";
-
-    const nombre = document.getElementById("nombre").value;
-    const precio = parseFloat(document.getElementById("precio_unidad").value); 
-    const descripcion = document.getElementById("descripcion").value;
-    const nacional = document.getElementById("es_nacional").checked; 
-    const categoria = document.getElementById("categoria").value;
-    const imagen = document.getElementById("imagen_url").value;
-
-    if (!nombre || isNaN(precio) || !descripcion || !categoria || !imagen) {
-        alert("Todos los campos son obligatorios y el precio debe ser un número válido")
-        return
-    }
-
-    const datosProducto = {nombre, precio, descripcion, nacional, categoria, imagen};
-
-    fetch('http://localhost:3000/api/v1/productos', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(datosProducto)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(response.ok) {
-            alert(data.mensaje || "Se ha agregado el producto exitosamente")
-            window.location.reload()
-        } else {
-            alert(data.mensaje || "No se pudo agregar el producto")
-        }
-    })
 }

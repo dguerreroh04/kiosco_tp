@@ -168,6 +168,11 @@ router.put('/:id',async (req,res) =>{
       }
       datos_actualizados.dni = dni
     }
+    if (contrasenia !== "") {
+      datos_actualizados.contrasenia = contrasenia
+    } else {
+      datos_actualizados.contrasenia = usuario.contrasenia
+    }
 
     const usuario_modificado = await prisma.usuario.update({where: {id: Number(id)}, data: datos_actualizados})
 
