@@ -118,6 +118,7 @@ function mostrar_tickets() {
             ticketDiv.innerHTML = `
                 <p class="card-title">Fecha: ${ticket.fecha_venta.substring(0,10)}</p>
                 <p class="card-title">Total: ${ticket.total}</p>
+                <p class="card-title">Lista: ${ticket.productos_comprados}</p>
             `;
             container_tickets.appendChild(ticketDiv); 
         });  

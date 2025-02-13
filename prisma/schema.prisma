@@ -49,4 +49,5 @@ model Ticket {
   fecha_venta   DateTime @default(now()) @db.Timestamp(6)
   forma_pago    String
   total         Int
+  productos_comprados String
 }

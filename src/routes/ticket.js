@@ -73,6 +73,7 @@ router.post('/', async (req,res)=>{
     const domicilio = req.body.domicilio
     const forma_pago = req.body.forma_pago
     const total = req.body.total
+    const lista_productos = req.body.productos_comprados
     if(!id_comprador || !forma_pago || !nombre_kiosco || !domicilio || !total){
         return res.status(400).json({mensaje: 'Faltan datos para completar el ticket'})
     }
@@ -94,11 +95,13 @@ router.post('/', async (req,res)=>{
                 id_comprador: id_comprador,
                 fecha_venta: new Date(),
                 forma_pago: forma_pago,
-                total: total
+                total: total,
+                productos_comprados: lista_productos
             }
         })
         res.status(201).json({mensaje:'Ticket creado exitosamente, verifique los datos de compra',ticket})
     }catch(error){
+        console.log(error)
         res.status(500).json({mensaje:'Error al generar el ticket',error})
     }
 })
