@@ -1,9 +1,15 @@
 // *Modificar datos*
 
 window.onload = function() {
-    saludo_usuario();
-    mostrar_usuario();
-    mostrar_tickets();
+    const id_usuario = obtener_id_usuario()
+    if (id_usuario) {
+        saludo_usuario();
+        mostrar_usuario();
+        mostrar_tickets();
+    } else {
+        alert("No hay sesión iniciada, inicie sesion o cree un usuario.")
+        location.replace('http://127.0.0.1:5500/frontend/html/inicio_cuenta.html')
+    }
 }
 
 function obtener_id_usuario() {
