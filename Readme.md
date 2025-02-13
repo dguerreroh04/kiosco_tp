@@ -50,6 +50,9 @@ La idea principal fue crear un sitio web en donde puedas comprar distintos produ
 ## Explicacion de cada parte de la pagina
 
 ### Pre-Inicio
+
+![](imagenes/preinicio.jpeg)
+
 Al entrar a la pagina, se permite crear una cuenta o iniciar sesión si ya tenes una.
 Para la creación de la cuenta se necesitan los siguientes datos:
 - **Nombre**
