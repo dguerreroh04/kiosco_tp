@@ -12,25 +12,29 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.get('/:id',async (req,res)=> {
-    const { id } = req.params 
+router.get('/:id_comprador/:id',async (req,res)=> {
+    const id = parseint(req.params.id)
+    const id_comprador = parseInt(req.params.id_comprador)
     try{
         const ticket = await prisma.ticket.findUnique({
-            where: {id:Number(id)}
+            where: {
+                id: id,
+                id_comprador: id_comprador
+            }
         })
         if(!ticket){
             return res.status(404).json({mensaje: 'No se encontro el ticket'})
         }
         res.json(ticket)
     }catch(error){
+        console.log(error)
         res.status(500).json({mensaje: 'Error al obtener el ticket',error})
     }
   })
 
-// 
 router.get('/:id_comprador', async (req, res) => {
     try{
-        const tickets_seleccionados = await prisma.tickets_seleccionados.findMany({
+        const tickets_seleccionados = await prisma.ticket.findMany({
             where: {
                 id_comprador: parseInt(req.params.id_comprador)
             },
@@ -40,6 +44,7 @@ router.get('/:id_comprador', async (req, res) => {
         });
         res.json(tickets_seleccionados)
     }catch(error){
+        console.log(error)
         res.status(500).json({mensaje:'Error al obtener los tickets seleccionados',error})
     }
 })

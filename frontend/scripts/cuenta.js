@@ -99,17 +99,19 @@ function mostrar_tickets() {
     const id_usuario = obtener_id_usuario()
     fetch(`http://localhost:3000/api/v1/ticket/${id_usuario}`)
     .then(response => response.json())
-    .then( datos => {
-        console.log(datos)
-        let container_tickets = document.getElementById("container_ticket")
-        let ticketDiv = document.createElement('div')
-        ticketDiv.classList.add('card', 'border-info', 'mb-3');
-        ticketDiv.style.width = '50%';
-        ticketDiv.style.height = '160px';
-        ticketDiv.innerHTML = `
-            <p class="card-title">Fecha: ${datos.fecha_venta}</p>
-            <p class="card-title">Total: ${datos.total}</p>
-        `;
-        container_tickets.appendChild(ticketDiv); 
+    .then( tickets => {
+        console.log(tickets)
+        tickets.forEach(ticket => {
+            let container_tickets = document.getElementById("container_ticket")
+            let ticketDiv = document.createElement('div')
+            ticketDiv.classList.add('card', 'border-info', 'mb-3');
+            ticketDiv.style.width = '100%';
+            ticketDiv.style.height = '100px';
+            ticketDiv.innerHTML = `
+                <p class="card-title">Fecha: ${ticket.fecha_venta}</p>
+                <p class="card-title">Total: ${ticket.total}</p>
+            `;
+            container_tickets.appendChild(ticketDiv); 
+        });  
     })
 }
