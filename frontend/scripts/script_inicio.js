@@ -128,12 +128,17 @@ function borrar_producto(id_producto) {
 
 //Para modificar un producto
 function modificar_producto(id_producto){
+    sessionStorage.setItem("id_producto", id_producto);
+    window.location.href = "modificar_producto.html";
+
+
+
     const nombre = document.getElementById("nombre").value;
     const precio = parseFloat(document.getElementById("precio_unidad").value); 
     const descripcion = document.getElementById("descripcion").value;
     const nacional = document.getElementById("es_nacional").checked; 
     const categoria = document.getElementById("categoria").value;
-    //const imagen = document.getElementById("imagen_url").value; lo dejo asi porque nose si sea necesario modificar la imagen
+    const imagen = document.getElementById("imagen_url").value;
 
     if (!nombre || isNaN(precio) || !descripcion || !categoria) {
         alert("Todos los campos son obligatorios y el precio debe ser un número válido")
@@ -159,6 +164,9 @@ function modificar_producto(id_producto){
 
 //Para crear un producto
 function crear_producto(){
+    sessionStorage.setItem("id_usuario", data.id);
+    window.location.href = "crear_producto.html";
+
     const nombre = document.getElementById("nombre").value;
     const precio = parseFloat(document.getElementById("precio_unidad").value); 
     const descripcion = document.getElementById("descripcion").value;

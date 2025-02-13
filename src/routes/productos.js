@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 router.get('/', async (req, res) => {
   try {
     const productos = await prisma.producto.findMany()
-    res.json(productos)
+    res.status(200).json(productos)
   } catch (error) {
     res.status(500).json({mensaje: 'Error al obtener los productos',error})
   }
@@ -24,8 +24,9 @@ router.get('/:id', async (req,res)=> {
     if (!producto){
       return res.status(404).json({mensaje: 'Producto no encontrado' })
     }
-    res.json(producto)
+    res.status(200).json(producto)
   } catch (error) {
+    console.log(error)
     res.status(500).json({mensaje: 'Error al obtener el producto',error})
   }
 })
@@ -46,8 +47,9 @@ router.delete('/:id',async (req,res)=> {
         id: parseInt(req.params.id)
       }
     })
-    res.send(producto_eliminado)
+    res.status(200).json({mensaje: 'Producto borrado'}, producto_eliminado)
   } catch (error) {
+    console.log(error)
     res.status(500).json({mensaje: 'Error al eliminar el producto',error})
   }
 })
@@ -87,10 +89,9 @@ router.post('/', async (req, res) => {
   const nombre = req.body.nombre
   const precio_unidad = Number(req.body.precio)
   const descripcion = req.body.descripcion
-  const nacional = req.body.nacional
+  const nacional = Boolean(req.body.nacional)
   const categoria = req.body.categoria
   const imagen = req.body.imagen
-  console.log(typeof nacional)
   if (!nombre || !precio_unidad || !descripcion || nacional === undefined || !categoria || !imagen) {
     return res.status(400).json({mensaje: 'Todos los campos son obligatorios y deben ser correctos'})
   }
@@ -118,7 +119,7 @@ router.post('/', async (req, res) => {
       imagen: imagen
     }
   })
-  res.status(201).send(producto)
+  res.status(201).json({mensaje: 'Producto creado'})
 })
 
 router.put('/:id', async (req,res)=> {
@@ -170,7 +171,7 @@ router.put('/:id', async (req,res)=> {
       imagen: imagen
     }
   })
-  res.status(200).send(producto)
+  res.status(201).json({mensaje: 'Producto modificado'})
 })
 
 module.exports = router
