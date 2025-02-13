@@ -87,3 +87,61 @@ function añadir_carrito(id_producto) {
     })
     .catch(error => console.error("Error al añadir al carrito:", error));
 }
+
+//Para eliminar un producto
+function obtener_id_producto() {
+    return sessionStorage.getItem("id_producto");
+}
+
+function borrar_producto(id_producto) {
+
+    if (!confirm("¿Estás seguro de que quieres eliminar este producto?")) {
+        return;
+    }
+    fetch (`http://localhost:3000/api/v1/productos/${id_producto}`,{
+        method: "DELETE",
+    })
+    .then(response => response.json())
+    .then(data =>{
+        if(response.ok){
+            alert(data.mensaje || "Se ha eliminado el producto")
+            window.location.reload()
+        }else{
+            alert(data.mensaje || "No se pudo eliminar el producto")
+        }
+    })
+}
+
+//Para crear un producto
+function crear_producto(){
+    const nombre = document.getElementById("nombre").value;
+    const precio = parseFloat(document.getElementById("precio_unidad").value); 
+    const descripcion = document.getElementById("descripcion").value;
+    const nacional = document.getElementById("es_nacional").checked; 
+    const categoria = document.getElementById("categoria").value;
+    const imagen = document.getElementById("imagen_url").value;
+
+    if (!nombre || isNaN(precio) || !descripcion || !categoria || !imagen) {
+        alert("Todos los campos son obligatorios y el precio debe ser un número válido")
+        return
+    }
+
+    const datosProducto = {nombre, precio, descripcion, nacional, categoria, imagen};
+
+    fetch('http://localhost:3000/api/v1/productos', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datosProducto)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(response.ok) {
+            alert(data.mensaje || "Se ha agregado el producto exitosamente")
+            window.location.reload()
+        } else {
+            alert(data.mensaje || "No se pudo agregar el producto")
+        }
+    })
+}
