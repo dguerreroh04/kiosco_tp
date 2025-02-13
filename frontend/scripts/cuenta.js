@@ -33,7 +33,7 @@ function mostrar_usuario() {
         console.log(usuario)
         let container = document.getElementById('datos_usuario');
         let usuarioDiv = document.createElement('div');
-        usuarioDiv.classList.add('card', 'border-info', 'mb-3');
+        usuarioDiv.classList.add('card', 'text-bg-secondary', 'mb-3');
         usuarioDiv.style.width = '100%';
         usuarioDiv.style.height = '160px';
         usuarioDiv.innerHTML = `
@@ -113,7 +113,7 @@ function mostrar_tickets() {
         tickets.forEach(ticket => {
             let container_tickets = document.getElementById("container_ticket")
             let ticketDiv = document.createElement('div')
-            ticketDiv.classList.add('card', 'border-info', 'mb-3');
+            ticketDiv.classList.add('card', 'text-bg-dark', 'mb-3');
             ticketDiv.style.width = '100%';
             ticketDiv.style.height = '100px';
             ticketDiv.innerHTML = `
@@ -124,3 +124,9 @@ function mostrar_tickets() {
         });  
     })
 }
+
+function cerrar_sesion() {
+    sessionStorage.clear();
+    window.location.href = "../html/inicio_cuenta.html";
+ }
+ 

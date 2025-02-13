@@ -237,13 +237,33 @@ input::placeholder {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
 }
 
-.button1:hover {
+.button3 {
+    padding: 6px 12px;
+    background-color: #ff681f;
+    color: white;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    display: block;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
+ }
+ 
+ 
+ .button1:hover {
     background-color: #351fff;
-}
-
-.button2:hover {
-    background-color: #8b0f0f; 
-}
+ }
+ 
+ 
+ .button2:hover {
+    background-color: #8b0f0f;
+ }
+ 
+ 
+ .button3:hover {
+    background-color: #ce5317;
+ }
+ 
 
 h1 {
     font-size: 50px;
