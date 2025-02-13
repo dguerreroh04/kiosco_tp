@@ -1,12 +1,28 @@
 // *Modificar datos*
 
 window.onload = function() {
+    saludo_usuario();
     mostrar_usuario();
     mostrar_tickets();
 }
 
 function obtener_id_usuario() {
     return sessionStorage.getItem("id_usuario");
+}
+
+function saludo_usuario() {
+    const id_usuario = obtener_id_usuario()
+    fetch(`http://localhost:3000/api/v1/usuarios/${id_usuario}`)
+    .then(response => response.json())
+    .then(usuario => {
+        console.log(usuario)
+        let container = document.getElementById('saludo_usuario');
+        let saludo = document.createElement('div')
+        saludo.innerHTML = ` 
+            <p style="font-size: large; font-weight: bold;" >Hola ${usuario.nombre}!</p>
+        `;
+        container.appendChild(saludo);
+    })
 }
 
 function mostrar_usuario() {
@@ -101,7 +117,7 @@ function mostrar_tickets() {
             ticketDiv.style.width = '100%';
             ticketDiv.style.height = '100px';
             ticketDiv.innerHTML = `
-                <p class="card-title">Fecha: ${ticket.fecha_venta}</p>
+                <p class="card-title">Fecha: ${ticket.fecha_venta.substring(0,10)}</p>
                 <p class="card-title">Total: ${ticket.total}</p>
             `;
             container_tickets.appendChild(ticketDiv); 

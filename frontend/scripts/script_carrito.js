@@ -1,9 +1,25 @@
 window.onload = function() {
+    saludo_usuario();
     showCarrito();
 }
 
 function obtener_id_comprador() {
     return sessionStorage.getItem("id_usuario");
+}
+
+function saludo_usuario() {
+    const id_usuario = obtener_id_comprador()
+    fetch(`http://localhost:3000/api/v1/usuarios/${id_usuario}`)
+    .then(response => response.json())
+    .then(usuario => {
+        console.log(usuario)
+        let container = document.getElementById('saludo_usuario');
+        let saludo = document.createElement('div')
+        saludo.innerHTML = ` 
+            <p style="font-size: large; font-weight: bold;" >Hola ${usuario.nombre}!</p>
+        `;
+        container.appendChild(saludo);
+    })
 }
 
 function showCarrito() {

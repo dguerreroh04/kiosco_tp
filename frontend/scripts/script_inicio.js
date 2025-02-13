@@ -1,7 +1,8 @@
 window.onload = function() {
     const id_usuario = obtener_id_comprador()
+    saludo_usuario();
     if (!id_usuario) {
-        alert("No hay secion iniciada, inicie sesion o cree un usuario.")
+        alert("No hay sesión iniciada, inicie sesion o cree un usuario.")
         location.replace('http://127.0.0.1:5500/frontend/html/inicio_cuenta.html')
     }
     showProducts();
@@ -9,6 +10,21 @@ window.onload = function() {
 
 function obtener_id_comprador() {
     return sessionStorage.getItem("id_usuario");
+}
+
+function saludo_usuario() {
+    const id_usuario = obtener_id_comprador()
+    fetch(`http://localhost:3000/api/v1/usuarios/${id_usuario}`)
+    .then(response => response.json())
+    .then(usuario => {
+        console.log(usuario)
+        let container = document.getElementById('saludo_usuario');
+        let saludo = document.createElement('div')
+        saludo.innerHTML = ` 
+            <p style="font-size: large; font-weight: bold;" >Hola ${usuario.nombre}!</p>
+        `;
+        container.appendChild(saludo);
+    })
 }
 
 function showProducts() {
