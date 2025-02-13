@@ -138,7 +138,7 @@ router.put('/:id', async (req,res)=> {
   const nacional = req.body.nacional
   const categoria = req.body.categoria
   const imagen = req.body.imagen
-  const formato_no_deseado = /\s+/
+  const formato_no_deseado = /\s{2,}/
   if (comprobar_tipos_datos(nombre, descripcion, nacional, categoria, imagen) === false) {
     return res.status(400).json({mensaje: 'Los tipos de datos son erroneos'})
   }
