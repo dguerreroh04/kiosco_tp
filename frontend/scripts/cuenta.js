@@ -1,6 +1,11 @@
 // *Modificar datos*
 
 window.onload = function() {
+    const id_usuario = obtener_id_comprador()
+    if (!id_usuario) {
+        alert("No hay sesión iniciada, inicie sesion o cree un usuario.")
+        location.replace('http://127.0.0.1:5500/frontend/html/inicio_cuenta.html')
+    }
     saludo_usuario();
     mostrar_usuario();
     mostrar_tickets();

@@ -1,11 +1,11 @@
 window.onload = function() {
     const id_usuario = obtener_id_comprador()
-    saludo_usuario();
     if (!id_usuario) {
         alert("No hay sesión iniciada, inicie sesion o cree un usuario.")
         location.replace('http://127.0.0.1:5500/frontend/html/inicio_cuenta.html')
     }
     showProducts();
+    saludo_usuario();
 }
 
 function obtener_id_comprador() {
