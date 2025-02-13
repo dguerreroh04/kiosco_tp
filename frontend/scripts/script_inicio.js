@@ -37,19 +37,31 @@ function showProducts() {
             let container = document.getElementById('container_' + producto.categoria);
             
             if (container) {
-                let ul = container.querySelector('ul');
+                let row = container.querySelector('.row');
+                if (!row) {
+                    console.error('Fila no encontrada dentro de', container);
+                    return;
+                }
+                row.classList.add("g-3");
+                let colDiv = document.createElement('div');
+                colDiv.classList.add('col-lg-2', 'col-md-4', 'col-sm-6', 'p-2');
                 let productoDiv = document.createElement('div');
-                productoDiv.classList.add('card', 'border-info', 'mb-3');
+                productoDiv.classList.add('card', 'border-dark', 'mb-3');
                 productoDiv.style.width = '200px';
-                productoDiv.style.height = '365px';
+                productoDiv.style.height = '395px';
+                productoDiv.style.alignItems = 'center';
                 productoDiv.innerHTML = `
-                    <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 170px; height:200px;">
+                    <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 170px; height:200px; object-fit: cover;">
                     <h5 class="card-title">${producto.nombre}</h5>
                     <p class="card-text">$${producto.precio_unidad}</p>
-                    <p class="card-text">${producto.descripcion}</p>
-                    <button type="button" class="btn btn-primary btn-prod" onclick="añadir_carrito(${producto.id})">Añadir al carrito</button>
+                    <p class="card-text" style="height: 200px; overflow: hidden;">${producto.descripcion}</p>
+                    <div style="display: flex; flex-direction: row; ">
+                        <button type="button" class="btn btn-primary btn-prod" onclick="añadir_carrito(${producto.id})">Añadir al carrito</button>
+                        <button type="button" class="btn btn-dark btn-prod" onclick="modificar_producto(${producto.id})">Editar Producto</button>
+                    </div>
                 `;
-                ul.appendChild(productoDiv);
+                colDiv.appendChild(productoDiv)
+                row.appendChild(colDiv);
             } else {
                 console.error('Contenedor no encontrado')
             }
