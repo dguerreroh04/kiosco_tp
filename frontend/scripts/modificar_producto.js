@@ -38,7 +38,7 @@ function mostrar_producto() {
         productoDiv.style.height = '200px';
         productoDiv.innerHTML = `
             <p class="card-title">NOMBRE: ${producto.nombre}</p>
-            <p class="card-title">PRECIO: ${producto.precio_unidad}</p>
+            <p class="card-title">PRECIO: $${producto.precio_unidad}</p>
             <p class="card-title">DESCRIPCION: ${producto.descripcion}</p>
             <p class="card-title">NACIONAL: ${producto.nacional}</p>
             <p class="card-title">CATEGORIA: ${producto.categoria}</p>
@@ -89,7 +89,7 @@ function borrar() {
     if (!confirm("¿Estás seguro de que quieres eliminar el producto?")) {
         return;
     }
-    const id_usuario = obtener_id_producto();
+    const id_producto = obtener_id_producto();
 
     
     fetch(`http://localhost:3000/api/v1/productos/${id_producto}`, {

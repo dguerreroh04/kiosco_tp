@@ -20,7 +20,7 @@ model Producto {
 
 model Productos_seleccionados {
   id           Int      @id @default(autoincrement())
-  producto     Producto @relation(fields: [id_producto], references: [id])
+  producto     Producto @relation(fields: [id_producto], references: [id], onDelete: Cascade)
   cantidad     Int
   id_producto  Int
   comprador    Usuario  @relation(fields: [id_comprador], references: [id], onDelete: Cascade)

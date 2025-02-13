@@ -47,7 +47,7 @@ router.delete('/:id',async (req,res)=> {
         id: parseInt(req.params.id)
       }
     })
-    res.status(200).json({mensaje: 'Producto borrado'}, producto_eliminado)
+    res.status(200).json({mensaje: 'Producto borrado'})
   } catch (error) {
     console.log(error)
     res.status(500).json({mensaje: 'Error al eliminar el producto',error})
