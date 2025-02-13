@@ -47,7 +47,10 @@ body{
 .container_productos ul div button {
     height: 60px;
 }
-
+.row {
+    width: 100%;
+    justify-content: space-around;
+}
 .container_info_producto {
     max-width: 100%;
     margin: 10px;
