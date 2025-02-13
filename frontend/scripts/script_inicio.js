@@ -88,11 +88,12 @@ function añadir_carrito(id_producto) {
     .catch(error => console.error("Error al añadir al carrito:", error));
 }
 
-//Para eliminar un producto
+
 function obtener_id_producto() {
     return sessionStorage.getItem("id_producto");
 }
 
+//Para eliminar un producto
 function borrar_producto(id_producto) {
 
     if (!confirm("¿Estás seguro de que quieres eliminar este producto?")) {
@@ -109,6 +110,38 @@ function borrar_producto(id_producto) {
         }else{
             alert(data.mensaje || "No se pudo eliminar el producto")
         }
+        window.reload
+    })
+}
+
+//Para modificar un producto
+function modificar_producto(id_producto){
+    const nombre = document.getElementById("nombre").value;
+    const precio = parseFloat(document.getElementById("precio_unidad").value); 
+    const descripcion = document.getElementById("descripcion").value;
+    const nacional = document.getElementById("es_nacional").checked; 
+    const categoria = document.getElementById("categoria").value;
+    //const imagen = document.getElementById("imagen_url").value; lo dejo asi porque nose si sea necesario modificar la imagen
+
+    if (!nombre || isNaN(precio) || !descripcion || !categoria) {
+        alert("Todos los campos son obligatorios y el precio debe ser un número válido")
+        return
+    }
+    const datosProducto = {nombre, precio, descripcion, nacional, categoria};
+
+    fetch(`http://localhost:3000/api/v1/productos/${id_producto}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datosProducto)
+    })
+    .then(response => response.json())
+    .then(data =>{
+        if(data.mensaje){
+            alert(data.mensaje)
+        }else{
+            alert("Se modifico el producto")
+        }
+        window.location.reload()
     })
 }
 
